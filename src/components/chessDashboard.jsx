@@ -11,6 +11,7 @@ class ChessDashboard extends Component {
         
         socket.on("positionEvent", this.handlePositionEvent);
         socket.on("moveEvent", this.handleMoveEvent);
+        socket.on("workerFailed", this.handleWorkerFailed);
       }
       handlePositionEvent = (params) => {
         console.log("position event...");
@@ -24,6 +25,12 @@ class ChessDashboard extends Component {
         console.log(move);          
         if(move!=="test")
         toast.info("move : "+move)
+      };
+      handleWorkerFailed = ({worker}) => {
+        console.log("worker failed...");
+        console.log(worker);          
+        if(worker!=="test")
+        toast.error("worker failed : "+worker)
       };
     state = { fen: "start" };
     render() { 

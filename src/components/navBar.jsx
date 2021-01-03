@@ -52,7 +52,7 @@ class NavBar extends Component {
 
    
       socket.emit("join", { login:"default", room:"chess", jwt:"default" }, (param) => {
-        console.log("dołaczono do pokoju..." + param);
+        console.log("entered room..." + param);
         console.log(param);
       });
       this.setState({ signalValue: 1, connectionAdditionalText: "" });
@@ -119,22 +119,7 @@ class NavBar extends Component {
 
   Menus = [
     {
-      url: "giganci_historii",
-      submenus: [
-        {
-          label: "Odcinki",
-          link: "/giganci_historii/episodes",
-        },
-        {
-          label: "Pytania",
-          link: "/giganci_historii/questions",
-        },
-        {
-          label: "Kategorie",
-          link: "/giganci_historii/categories",
-        },
-      ],
-    },
+    }
   ];
 
   render() {
@@ -172,7 +157,7 @@ class NavBar extends Component {
               {!user && (
                 <React.Fragment>
                   <NavLink className="nav-item nav-link" to="/login">
-                    Zaloguj się
+                   Login
                   </NavLink>
                   {/* <NavLink className="nav-item nav-link" to="/register">
                 Register
@@ -197,29 +182,7 @@ class NavBar extends Component {
                   return null;
                 })}
 
-              {(
-                <React.Fragment>
-                  {" "}
-                  {(
-                    <NavLink className="nav-item nav-link" to="/1z10/panel">
-                      Panel
-                    </NavLink>
-                  )}
-                  {false && (
-                    <NavLink className="nav-item nav-link" to="/1z10/guzik">
-                      Guzik
-                    </NavLink>
-                  )}
-                  {(
-                    <NavLink
-                      className="nav-item nav-link float-right"
-                      to="/logout"
-                    >
-                      Wyloguj się
-                    </NavLink>
-                  )}
-                </React.Fragment>
-              )}
+            
             </div>
           </div>{" "}
           <SignalStrengthIcon
