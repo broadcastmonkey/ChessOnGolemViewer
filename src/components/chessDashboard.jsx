@@ -46,16 +46,16 @@ class ChessDashboard extends Component {
         if(move!=="test")
         toast.info("move : "+move +"\ntime: "+time);
       };
-      handleWorkerFailed = ({worker}) => {
+      handleWorkerFailed = (worker) => {
         console.log("worker failed...");
         console.log(worker);          
         if(worker!=="test")
-        toast.error("worker failed : "+worker)
+        toast.error("worker failed : "+worker.workerName);
       };
    
     render() { 
         return ( <div><h1>{this.state.statusBar}</h1><Chessboard
-            width={1024}
+            width={512}
             id="random"
             position={this.state.fen}
             transitionDuration={300}
