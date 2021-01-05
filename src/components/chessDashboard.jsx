@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Chessboard from "chessboardjsx";
 import socket from "./../services/socketService";
 import { toast } from "react-toastify";
-import { getMockMoves } from "../services/mockMovesService";
+/*import { getMockMoves } from "../services/mockMovesService";*/
 import MovesTable from "./movesTable";
 import "./chessDashboard.css";
 import { Card } from "react-bootstrap";
@@ -13,10 +13,10 @@ class ChessDashboard extends Component {
     statusBar: "",
     turn: "white",
     statusColor: "info",
-    moveNumber: 14,
-    depth: 7,
-    status: "searching for offer",
-    statusStats: "stats",
+    moveNumber: 1,
+    depth: 1,
+    status: "...",
+    statusStats: "...",
     taskId: "",
     gameId: "",
     intervalEnabled: false,
@@ -25,18 +25,24 @@ class ChessDashboard extends Component {
     moves: [] /*getMockMoves(22),*/,
 
     white_stats: {
-      total_moves: 13,
-      avg_depth: 4,
-      total_vm_time: 123,
-      total_time: 132,
-      total_cost: 133,
+      total_moves: 0,
+      avg_depth: 0,
+      total_vm_time: 0,
+      avg_vm_time: 0,
+      avg_golem_time: 0,
+      best_golem_time: 0,
+      total_time: 0,
+      total_cost: 0,
     },
     black_stats: {
-      total_moves: 12,
-      avg_depth: 4,
-      total_vm_time: 123,
-      total_time: 132,
-      total_cost: 133,
+      total_moves: 0,
+      avg_depth: 0,
+      total_vm_time: 0,
+      total_time: 0,
+      total_cost: 0,
+      avg_vm_time: 0,
+      avg_golem_time: 0,
+      best_golem_time: 0,
     },
   };
   PlayerEnum = Object.freeze({
@@ -87,7 +93,6 @@ class ChessDashboard extends Component {
   componentDidMount() {
     socket.on("currentTurnEvent", this.handleCurrentTurnEvent);
     socket.on("gameFinished", this.handleGameFinished);
-
     socket.on("positionEvent", this.handlePositionEvent);
     socket.on("moveEvent", this.handleMoveEvent);
     socket.on("providerFailed", this.handleProviderFailed);
@@ -99,34 +104,68 @@ class ChessDashboard extends Component {
     socket.on("movesRefreshed", this.handleMovesRefreshed);
   }
   handleGameFinished = (params) => {
-    // const { winner, type } = params;
+    const { winner, type } = params;
+    this.status = this.StatusEnum.game_end;
+    this.setState({
+      status: "Game Finished!",
+      statusStats: type === "draw" ? "DRAW" : winner + " PLAYER WINS",
+    });
+  };
+
+  defaultStatsObject = () => {
+    return {
+      total_moves: 0,
+      avg_depth: 0,
+      total_vm_time: 0,
+      total_time: 0,
+      total_cost: 0,
+      avg_vm_time: 0,
+      avg_golem_time: 0,
+      best_golem_time: 0,
+    };
   };
 
   getStats = (moves, turn) => {
-    const reducerSum = (accumulator, currentValue) =>
-      accumulator + currentValue;
+    if (
+      moves.length === 0 ||
+      moves.filter((x) => x.turn === turn).length === 0
+    ) {
+      return this.defaultStatsObject();
+    }
 
     let stats = {};
-    stats.total_moves = moves.filter((x) => x.turn == turn).length;
+    stats.total_moves = moves.filter((x) => x.turn === turn).length;
     stats.avg_depth =
       moves
-        .filter((x) => x.turn == turn)
+        .filter((x) => x.turn === turn)
         .map((x) => x.depth)
         .reduce((a, c) => a + c) / stats.total_moves;
     stats.total_vm_time = moves
-      .filter((x) => x.turn == turn)
+      .filter((x) => x.turn === turn)
       .map((x) => parseFloat(x.vm_time) / 1000)
       .reduce((a, c) => a + c)
       .toFixed(3);
     stats.total_time = moves
-      .filter((x) => x.turn == turn)
+      .filter((x) => x.turn === turn)
       .map((x) =>
         x.total_time === undefined ? 0.0 : parseFloat(x.total_time) / 1000
       )
       .reduce((a, c) => a + c)
       .toFixed(3);
+
+    stats.avg_vm_time = (stats.total_vm_time / stats.total_moves).toFixed(3);
+    stats.avg_golem_time = (stats.total_time / stats.total_moves).toFixed(3);
+    stats.best_golem_time = Math.min(
+      ...moves
+        .filter((x) => x.turn === turn)
+        .map((x) =>
+          x.total_time === undefined ? 9999.0 : parseFloat(x.total_time) / 1000
+        )
+    ).toFixed(3);
+    if (stats.best_golem_time == 9999.0) stats.best_golem_time = "-";
+
     stats.total_cost = moves
-      .filter((x) => x.turn == turn)
+      .filter((x) => x.turn === turn)
       .map((x) => (x.cost === undefined ? 0.0 : parseFloat(x.cost)))
       .reduce((a, c) => a + c);
     return stats;
@@ -165,8 +204,6 @@ class ChessDashboard extends Component {
       moveNumber,
       turn: turnId === "w" ? "white" : "black",
       depth,
-      status: "searching for best offer...",
-      statusStats: "offer is in the market...",
     });
     console.log("current turn event");
     console.log(params);
@@ -178,7 +215,8 @@ class ChessDashboard extends Component {
     if (this.state.taskId !== taskId) return;
     this.status = this.StatusEnum.searching;
     this.setState({
-      statusStats: "search started...",
+      status: "searching for best offer...",
+      statusStats: "offer is in the market...",
     });
   };
   handleComputationFinished = (params) => {
@@ -311,7 +349,13 @@ class ChessDashboard extends Component {
             <br />
             <i>total vm time:</i> <b>{stats.total_vm_time}</b>
             <br />
+            <i>avg vm time:</i> <b>{stats.avg_vm_time}</b>
+            <br />
             <i>total golem time:</i> <b>{stats.total_time}</b>
+            <br />
+            <i>avg golem time:</i> <b>{stats.avg_golem_time}</b>
+            <br />
+            <i>best golem time:</i> <b>{stats.best_golem_time}</b>
             <br />
             <i>total golem cost:</i> <b>{stats.total_cost}</b>
             <br />

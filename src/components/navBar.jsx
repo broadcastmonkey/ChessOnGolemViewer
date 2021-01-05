@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
 import socket from "./../services/socketService";
 import SignalStrengthIcon from "./common/socketsio/signalStrengthIcon";
 import { withRouter } from "react-router-dom";
@@ -22,42 +21,32 @@ class NavBar extends Component {
   user = null;
   jwt = null;
   componentDidMount() {
-   
-
     socket.on("disconnect", this.handleDisconnect);
     socket.on("moveEvent", this.handleMoveEvent);
     socket.on("connect", this.handleConnect);
     socket.on("reconnect", this.handleConnect);
   }
 
-
   handleMoveEvent = (params) => {
     const { move } = params;
     console.log("move: " + move);
   };
-  handleEvent = (params) => {
-    const { eventName } = params;
-    if (eventName === "close_and_redirect") {
-      this.handleCloseAndRedirect();
-    } else if (eventName === "closing_other_tabs") {
-      this.handleClosingOtherTabs();
-    } else if (eventName === "force_logout") {
-      this.handleForceLogout();
-    }
-  };
+  handleEvent = (params) => {};
 
   handleConnect = (param) => {
     socket.sendBuffer = [];
     if (this.unmounting) return;
 
-   
-      socket.emit("join", { login:"default", room:"chess", jwt:"default" }, (param) => {
+    socket.emit(
+      "join",
+      { login: "default", room: "chess", jwt: "default" },
+      (param) => {
         console.log("entered room..." + param);
         console.log(param);
-      });
-      this.setState({ signalValue: 1, connectionAdditionalText: "" });
-      this.clearInterval();
-    
+      }
+    );
+    this.setState({ signalValue: 1, connectionAdditionalText: "" });
+    this.clearInterval();
   };
   handleDisconnect = (param) => {
     if (this.unmounting) return;
@@ -117,88 +106,22 @@ class NavBar extends Component {
     });
   };
 
-  Menus = [
-    {
-    }
-  ];
+  Menus = [{}];
 
   render() {
-    //console.log("navbar props", this.props);
-
-    const { user } = this.props;
-    const collapsed = this.state.collapsed;
-    const classOne = collapsed
-      ? "collapse navbar-collapse"
-      : "collapse navbar-collapse show";
-    const classTwo = collapsed
-      ? "navbar-toggler navbar-toggler-right collapsed"
-      : "navbar-toggler navbar-toggler-right";
-
     return (
-      (this.state.navBarVisible && (
+      this.state.navBarVisible && (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark w-100">
-          <button
-            className={`${classTwo}`}
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-            onClick={this.toggleNavbar}
-          >
-            <span className="navbar-toggler-icon" />
-          </button>{" "}
-          {/* <Link className="navbar-brand" to="/"> */}
-          <span className="text-white">{user && user.name}</span>
-          {/* </Link> */}
-          <div className={`${classOne}`} id=" ">
-            <div className="navbar-nav w-100">
-              {!user && (
-                <React.Fragment>
-                  <NavLink className="nav-item nav-link" to="/login">
-                   Login
-                  </NavLink>
-                  {/* <NavLink className="nav-item nav-link" to="/register">
-                Register
-              </NavLink> */}
-                </React.Fragment>
-              )}
-
-              {
-                this.Menus.map((x) => {
-                  if (this.props.location.pathname.includes(x.url))
-                    return x.submenus.map((submenu) => {
-                      return (
-                        <NavLink
-                          key={submenu.link}
-                          className="nav-item nav-link"
-                          to={submenu.link}
-                        >
-                          {submenu.label}{" "}
-                        </NavLink>
-                      );
-                    });
-                  return null;
-                })}
-
-            
-            </div>
-          </div>{" "}
           <SignalStrengthIcon
             label=""
             signalValue={this.state.signalValue}
             additionalText={this.state.connectionAdditionalText}
-          />
+          />{" "}
+          <h4 style={{ margin: 0, marginLeft: 20, color: "white" }}>
+            Chess on Golem
+          </h4>
         </nav>
-      )) ||
-      (this.state.forceSignalVisible && (
-        <SignalStrengthIcon
-          label=""
-          signalValue={this.state.signalValue}
-          additionalText={this.state.connectionAdditionalText}
-        />
-      ))
+      )
     );
   }
 }

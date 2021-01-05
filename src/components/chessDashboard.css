@@ -10,8 +10,8 @@ div.chess-board {
   /*border: 1px solid red;*/
 }
 div.chess-table {
-  width: 1340px;
-  height: 1024px;
+  width: 1354px;
+  height: 860px;
   overflow: hidden;
   overflow-y: scroll;
   /*border: 1px solid green;*/

@@ -18,15 +18,15 @@ class MovesTable extends Component {
     { path: "turn", label: "turn" },
     { path: "move", label: "move" },
     { path: "depth", label: "depth" },
-    { path: "vs", label: "vs" },
+
     {
       path: "worker",
       label: "worker",
       //content: (worker) => toast.error("worker info: " + worker),
     },
     { path: "failed_times", label: "fails" },
-    { path: "vm_time", label: "vm time" },
-    { path: "total_time", label: "total time" },
+    { path: "vm_time", label: "vm time [ms]" },
+    { path: "total_time", label: "total time [ms]" },
     { path: "offers_count", label: "proposals" },
     { path: "cost", label: "cost" },
   ];
