@@ -1,0 +1,19 @@
+div.chess-wrapper {
+  width: 1920px;
+  /* border: 1px solid black;*/
+  overflow: hidden; /* will contain if #first is longer than #second */
+}
+div.chess-board {
+  width: 550px;
+  float: left; /* add this */
+
+  /*border: 1px solid red;*/
+}
+div.chess-table {
+  width: 1340px;
+  height: 1024px;
+  overflow: hidden;
+  overflow-y: scroll;
+  /*border: 1px solid green;*/
+  /*overflow: hidden;*/ /* if you don't want #second to wrap below #first */
+}
