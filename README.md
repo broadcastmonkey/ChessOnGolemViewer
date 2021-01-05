@@ -1,14 +1,4 @@
-https://github.com/broadcastmonkey/ChessOnGolemViewer
-(also in this repository)
-
-React application that serves as GUI for displaying chess game progress for Chess on Golem.
-
-It displays game progress and some interesing stats regarding provider nodes that took part in calculations
-
-There is live demo available at:
-http://chess-on-golem-viewer.herokuapp.com/
-
-If It's not running you can request start at pawel.burgchardt [ A-T] gmail.com## Chess on Golem Viewer
+## Chess on Golem Viewer
 
 ### Summary
 
@@ -17,7 +7,7 @@ This project was created as an entry to Golem Hackathon 12/2020.
 It's purpose is to show that any state based game / problem can be run in Golem Network and solved interactively by provider nodes.
 
 This particular example shows classical chessgame played by two AI players that facilitate golem network for computing.
-Whole game is managed by Node.js server which distributes computing tasks across Golem Network providers' network.
+Whole game is managed by Node.js server which distributes computing tasks across Golem Network providers.
 Each move request is put into Golem Market and calculated by provider that puts best offer.
 To show how computing power could affect outcome of the game each player is allowed to calculate next move with particular depth. (With enough provider nodes in network that could be achieved without forcing one of players to ask for computations with lower depth than opponent)
 
