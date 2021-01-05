@@ -128,25 +128,27 @@ class ChessDashboard extends Component {
   getStats = (moves, turn) => {
     if (
       moves.length === 0 ||
-      moves.filter((x) => x.turn === turn).length === 0
+      moves.filter((x) => x.turn === turn && x.move !== undefined).length === 0
     ) {
       return this.defaultStatsObject();
     }
 
     let stats = {};
-    stats.total_moves = moves.filter((x) => x.turn === turn).length;
+    stats.total_moves = moves.filter(
+      (x) => x.turn === turn && x.move !== undefined
+    ).length;
     stats.avg_depth =
       moves
-        .filter((x) => x.turn === turn)
+        .filter((x) => x.turn === turn && x.move !== undefined)
         .map((x) => x.depth)
         .reduce((a, c) => a + c) / stats.total_moves;
     stats.total_vm_time = moves
-      .filter((x) => x.turn === turn)
+      .filter((x) => x.turn === turn && x.move !== undefined)
       .map((x) => parseFloat(x.vm_time) / 1000)
       .reduce((a, c) => a + c)
       .toFixed(3);
     stats.total_time = moves
-      .filter((x) => x.turn === turn)
+      .filter((x) => x.turn === turn && x.move !== undefined)
       .map((x) =>
         x.total_time === undefined ? 0.0 : parseFloat(x.total_time) / 1000
       )
@@ -157,7 +159,7 @@ class ChessDashboard extends Component {
     stats.avg_golem_time = (stats.total_time / stats.total_moves).toFixed(3);
     stats.best_golem_time = Math.min(
       ...moves
-        .filter((x) => x.turn === turn)
+        .filter((x) => x.turn === turn && x.move !== undefined)
         .map((x) =>
           x.total_time === undefined ? 9999.0 : parseFloat(x.total_time) / 1000
         )
@@ -165,7 +167,7 @@ class ChessDashboard extends Component {
     if (stats.best_golem_time == 9999.0) stats.best_golem_time = "-";
 
     stats.total_cost = moves
-      .filter((x) => x.turn === turn)
+      .filter((x) => x.turn === turn && x.move !== undefined)
       .map((x) => (x.cost === undefined ? 0.0 : parseFloat(x.cost)))
       .reduce((a, c) => a + c);
     return stats;
@@ -211,6 +213,7 @@ class ChessDashboard extends Component {
     this.startTimer();
   };
   handleComputationStarted = (params) => {
+    console.log("started started started");
     const { taskId } = params;
     if (this.state.taskId !== taskId) return;
     this.status = this.StatusEnum.searching;
@@ -226,7 +229,7 @@ class ChessDashboard extends Component {
     //if (this.state.taskId !== taskId) return;
     let timeInSec = Math.round(time / 1000);
     toast.info(
-      `computation with task_id: ${taskId} finished in : ${time} + ms  (~ ${timeInSec}s )`
+      `computation with task_id: ${taskId} \nfinished in : ${time} + ms  \n(~ ${timeInSec}s )`
     );
   };
   handleAgreementConfirmed = (params) => {
@@ -263,7 +266,7 @@ class ChessDashboard extends Component {
     console.log("move event...");
     console.log(move);
     if (move !== "test")
-      toast.info("move : " + move + "depth : " + depth + "\ntime: " + time);
+      toast.info("move : " + move + "\ndepth : " + depth + "\ntime: " + time);
   };
   handleProviderFailed = (provider) => {
     const { taskId, providerName } = provider;
@@ -315,8 +318,12 @@ class ChessDashboard extends Component {
           <b className="ml-5"> task id: {this.state.taskId}</b>
         </Card.Header>
         <Card.Body>
-          <Card.Title>{this.state.status} </Card.Title>
-          <Card.Text>{this.state.statusStats}</Card.Text>
+          <Card.Title>
+            <h3>{this.state.status} </h3>
+          </Card.Title>
+          <Card.Text>
+            <h3>{this.state.statusStats}</h3>
+          </Card.Text>
         </Card.Body>
       </Card>
     );
@@ -347,15 +354,15 @@ class ChessDashboard extends Component {
             <br />
             <i>avg depth:</i> <b>{stats.avg_depth}</b>
             <br />
-            <i>total vm time:</i> <b>{stats.total_vm_time}</b>
+            <i>total vm time:</i> <b>{stats.total_vm_time}s</b>
             <br />
-            <i>avg vm time:</i> <b>{stats.avg_vm_time}</b>
+            <i>avg vm time:</i> <b>{stats.avg_vm_time}s</b>
             <br />
-            <i>total golem time:</i> <b>{stats.total_time}</b>
+            <i>total golem time:</i> <b>{stats.total_time}s</b>
             <br />
-            <i>avg golem time:</i> <b>{stats.avg_golem_time}</b>
+            <i>avg golem time:</i> <b>{stats.avg_golem_time}s</b>
             <br />
-            <i>best golem time:</i> <b>{stats.best_golem_time}</b>
+            <i>best golem time:</i> <b>{stats.best_golem_time}s</b>
             <br />
             <i>total golem cost:</i> <b>{stats.total_cost}</b>
             <br />
