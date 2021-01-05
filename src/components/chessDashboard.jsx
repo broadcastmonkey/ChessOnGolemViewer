@@ -22,7 +22,7 @@ class ChessDashboard extends Component {
     intervalEnabled: false,
     secondsComputing: 0,
     intervalId: 0,
-    moves: getMockMoves(22),
+    moves: [] /*getMockMoves(22),*/,
 
     white_stats: {
       total_moves: 13,
