@@ -23,7 +23,26 @@ class ChessDashboard extends Component {
     secondsComputing: 0,
     intervalId: 0,
     moves: getMockMoves(22),
+
+    white_stats: {
+      total_moves: 13,
+      avg_depth: 4,
+      total_vm_time: 123,
+      total_time: 132,
+      total_cost: 133,
+    },
+    black_stats: {
+      total_moves: 12,
+      avg_depth: 4,
+      total_vm_time: 123,
+      total_time: 132,
+      total_cost: 133,
+    },
   };
+  PlayerEnum = Object.freeze({
+    white: 1,
+    black: 2,
+  });
   StatusEnum = Object.freeze({
     none: 1,
     searching: 2,
@@ -83,6 +102,36 @@ class ChessDashboard extends Component {
     // const { winner, type } = params;
   };
 
+  getStats = (moves, turn) => {
+    const reducerSum = (accumulator, currentValue) =>
+      accumulator + currentValue;
+
+    let stats = {};
+    stats.total_moves = moves.filter((x) => x.turn == turn).length;
+    stats.avg_depth =
+      moves
+        .filter((x) => x.turn == turn)
+        .map((x) => x.depth)
+        .reduce((a, c) => a + c) / stats.total_moves;
+    stats.total_vm_time = moves
+      .filter((x) => x.turn == turn)
+      .map((x) => parseFloat(x.vm_time) / 1000)
+      .reduce((a, c) => a + c)
+      .toFixed(3);
+    stats.total_time = moves
+      .filter((x) => x.turn == turn)
+      .map((x) =>
+        x.total_time === undefined ? 0.0 : parseFloat(x.total_time) / 1000
+      )
+      .reduce((a, c) => a + c)
+      .toFixed(3);
+    stats.total_cost = moves
+      .filter((x) => x.turn == turn)
+      .map((x) => (x.cost === undefined ? 0.0 : parseFloat(x.cost)))
+      .reduce((a, c) => a + c);
+    return stats;
+  };
+
   handleMovesRefreshed = (incoming) => {
     let moves = [];
     for (const [key, value] of Object.entries(incoming)) {
@@ -91,7 +140,12 @@ class ChessDashboard extends Component {
 
     console.log("moves");
     console.log(moves);
-    this.setState({ moves });
+
+    this.setState({
+      moves,
+      black_stats: this.getStats(moves, "black"),
+      white_stats: this.getStats(moves, "white"),
+    });
   };
 
   handleOffersReceived = (params) => {
@@ -229,13 +283,70 @@ class ChessDashboard extends Component {
       </Card>
     );
   };
+
+  renderPlayerCard(player) {
+    const stats =
+      player === this.PlayerEnum.white
+        ? this.state.white_stats
+        : this.state.black_stats;
+
+    return (
+      <Card
+        bg={player === this.PlayerEnum.white ? "light" : "dark"}
+        text={player === this.PlayerEnum.white ? "dark" : "light"}
+        style={{ width: "512" }}
+        className="mb-2 mt-2"
+      >
+        <Card.Header>
+          <center>
+            <b>{player === this.PlayerEnum.white ? "WHITE" : "BLACK"}</b>{" "}
+          </center>
+        </Card.Header>
+        <Card.Body>
+          <Card.Title>Statistics: </Card.Title>
+          <Card.Text>
+            <i>total moves:</i> <b>{stats.total_moves}</b>
+            <br />
+            <i>avg depth:</i> <b>{stats.avg_depth}</b>
+            <br />
+            <i>total vm time:</i> <b>{stats.total_vm_time}</b>
+            <br />
+            <i>total golem time:</i> <b>{stats.total_time}</b>
+            <br />
+            <i>total golem cost:</i> <b>{stats.total_cost}</b>
+            <br />
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    );
+  }
+
+  renderPlayerCards = () => {
+    return (
+      <div>
+        <div className="card-left">
+          {this.renderPlayerCard(this.PlayerEnum.white)}
+        </div>
+        <div className="card-right">
+          {" "}
+          {this.renderPlayerCard(this.PlayerEnum.black)}
+        </div>
+      </div>
+    );
+  };
+
   render() {
     return (
       <div>
         <div>{this.renderHeader()}</div>
         <div className="chess-wrapper">
-          <div className="chess-board">{this.renderChessBoard()}</div>
-          <div className="chess-table">{this.renderTable()}</div>
+          <div className="chess-board">
+            <div>{this.renderChessBoard()}</div>
+            <div>{this.renderPlayerCards()}</div>
+          </div>
+          <div className="chess-table">
+            <div>{this.renderTable()}</div>
+          </div>
         </div>
       </div>
     );

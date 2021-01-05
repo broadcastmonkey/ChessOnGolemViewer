@@ -17,3 +17,22 @@ div.chess-table {
   /*border: 1px solid green;*/
   /*overflow: hidden;*/ /* if you don't want #second to wrap below #first */
 }
+
+div.cards-wrapper {
+  width: 550px;
+  /* border: 1px solid black;*/
+  overflow: hidden; /* will contain if #first is longer than #second */
+}
+div.card-left {
+  width: 250px;
+  float: left; /* add this */
+
+  /*border: 1px solid red;*/
+}
+div.card-right {
+  width: 250px;
+  overflow: hidden;
+
+  /*border: 1px solid green;*/
+  /*overflow: hidden;*/ /* if you don't want #second to wrap below #first */
+}
