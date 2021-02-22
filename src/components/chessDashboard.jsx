@@ -164,7 +164,7 @@ class ChessDashboard extends Component {
           x.total_time === undefined ? 9999.0 : parseFloat(x.total_time) / 1000
         )
     ).toFixed(3);
-    if (stats.best_golem_time == 9999.0) stats.best_golem_time = "-";
+    if (stats.best_golem_time === 9999.0) stats.best_golem_time = "-";
 
     stats.total_cost = moves
       .filter((x) => x.turn === turn && x.move !== undefined)
@@ -175,7 +175,7 @@ class ChessDashboard extends Component {
 
   handleMovesRefreshed = (incoming) => {
     let moves = [];
-    for (const [key, value] of Object.entries(incoming)) {
+    for (const [, value] of Object.entries(incoming)) {
       moves.push(value);
     }
 
