@@ -29,6 +29,7 @@ http://developed.home.pl/chessongolem.pdf
 
 #### Node Chess App
 
+providerFailed
 Node.js Server that can be run on linux or windows machines that is responsible for handling game and requesting Golem Network for next moves for each AI player.
 
 Is used also as backend server for GUI App that displayes chess game in real time with some statistics regarding provider nodes work.
