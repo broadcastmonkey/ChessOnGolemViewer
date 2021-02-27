@@ -1,6 +1,6 @@
 function getMockMove(id) {
   let move = {};
-  move.nr = id + "abc";
+  move.stepId = id + "abc";
   move.turn = "white";
   move.move = "e3e4";
   move.depth = id * 2;

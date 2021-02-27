@@ -101,6 +101,7 @@ class ChessDashboard extends Component {
     socket.on("computationStarted", this.handleComputationStarted);
     socket.on("computationFinished", this.handleComputationFinished);
     socket.on("offersReceived", this.handleOffersReceived);
+    socket.on("proposalsReceived", this.handleProposalsReceived);
     socket.on("movesRefreshed", this.handleMovesRefreshed);
   }
   handleGameFinished = (params) => {
@@ -126,6 +127,8 @@ class ChessDashboard extends Component {
   };
 
   getStats = (moves, turn) => {
+    console.log("getstats", moves);
+    console.log("turn", turn);
     if (
       moves.length === 0 ||
       moves.filter((x) => x.turn === turn && x.move !== undefined).length === 0
@@ -194,7 +197,16 @@ class ChessDashboard extends Component {
     if (this.state.taskId !== taskId) return;
     if (this.status === this.StatusEnum.searching) {
       this.setState({
-        statusStats: `${offersCount} proposals received...`,
+        statusStats: `${offersCount} offers received...`,
+      });
+    }
+  };
+  handleProposalsReceived = (params) => {
+    const { proposalsCount, taskId } = params;
+    if (this.state.taskId !== taskId) return;
+    if (this.status === this.StatusEnum.searching) {
+      this.setState({
+        statusStats: `${proposalsCount} proposals received...`,
       });
     }
   };
@@ -279,7 +291,7 @@ class ChessDashboard extends Component {
   renderTable = () => {
     let moves = this.state.moves;
 
-    return <MovesTable users={moves} />;
+    return <MovesTable moves={moves} />;
   };
   renderChessBoard = () => {
     return (
@@ -319,10 +331,10 @@ class ChessDashboard extends Component {
         </Card.Header>
         <Card.Body>
           <Card.Title>
-            <h3>{this.state.status} </h3>
+            <b>{this.state.status} </b>
           </Card.Title>
           <Card.Text>
-            <h3>{this.state.statusStats}</h3>
+            <b>{this.state.statusStats}</b>
           </Card.Text>
         </Card.Body>
       </Card>

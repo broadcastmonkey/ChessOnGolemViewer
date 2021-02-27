@@ -5,7 +5,7 @@ import { Table } from "react-bootstrap";
 
 const GenericTable = ({ columns, sortColumn, onSort, data }) => {
   return (
-    <Table table striped hover bordered>
+    <Table striped hover bordered>
       <TableHeader columns={columns} sortColumn={sortColumn} onSort={onSort} />
       <TableBody columns={columns} data={data} />
     </Table>

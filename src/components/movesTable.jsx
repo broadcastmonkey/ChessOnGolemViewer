@@ -6,12 +6,12 @@ import { Link } from "react-router-dom";
 class MovesTable extends Component {
   columns = [
     {
-      path: "nr",
+      path: "stepId",
       label: "nr",
-      key: "nr",
+      key: "stepId",
       content: (user) => (
-        <Link key={user} onClick={() => toast.error("clicked: " + user.nr)}>
-          {user.nr}
+        <Link key={user} onClick={() => toast.error("clicked: " + user.stepId)}>
+          {user.stepId}
         </Link>
       ),
     },
@@ -32,12 +32,12 @@ class MovesTable extends Component {
   ];
 
   render() {
-    const { users } = this.props;
+    const { moves } = this.props;
 
     return (
       <GenericTable
         columns={this.columns}
-        data={users}
+        data={moves}
         //sortColumn={sortColumn}
         //onSort={onSort}
       />

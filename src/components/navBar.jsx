@@ -118,7 +118,7 @@ class NavBar extends Component {
             additionalText={this.state.connectionAdditionalText}
           />{" "}
           <h4 style={{ margin: 0, marginLeft: 20, color: "white" }}>
-            Chess on Golem
+            Chess on Golem / alpha iv
           </h4>
         </nav>
       )
