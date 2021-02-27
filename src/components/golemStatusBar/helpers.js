@@ -1,5 +1,5 @@
-function createStatusLine(id, text, type) {
-    return { id: id, text: text, type: type };
+function createStatusLine(id, text, type, value) {
+    return { id: id, text: text, type: type, value: value };
 }
 
 function createStatusLines() {
