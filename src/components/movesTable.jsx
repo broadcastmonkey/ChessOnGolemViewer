@@ -10,7 +10,11 @@ class MovesTable extends Component {
       label: "nr",
       key: "stepId",
       content: (user) => (
-        <Link key={user} onClick={() => toast.error("clicked: " + user.stepId)}>
+        <Link
+          key={user}
+          onClick={() => toast.error("clicked: " + user.stepId)}
+          to=""
+        >
           {user.stepId}
         </Link>
       ),

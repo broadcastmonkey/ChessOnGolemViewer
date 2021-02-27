@@ -14,7 +14,7 @@ div.chess-table {
   height: 860px;
   overflow: hidden;
   overflow-y: scroll;
-  /*border: 1px solid green;*/
+  /*border: 1px solid green;*/  
   /*overflow: hidden;*/ /* if you don't want #second to wrap below #first */
 }
 

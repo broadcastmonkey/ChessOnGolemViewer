@@ -1,0 +1,12 @@
+b.golemStatusInactive {
+    color: gray;
+}
+b.golemStatusActive {
+    color: white;
+}
+b.golemStatusFailed {
+    color: red;
+}
+b.golemStatusOk {
+    color: green;
+}
