@@ -2,7 +2,7 @@ b.golemStatusInactive {
     color: lightgray;
 }
 b.golemStatusActive {
-    color: white;
+    color: black;
 }
 b.golemStatusFailed {
     color: red;

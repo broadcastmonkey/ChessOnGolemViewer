@@ -24,7 +24,9 @@ class GolemStatusBar extends Component {
                     <Card.Text>
                         {statusLines.map((x) => (
                             <React.Fragment key={x.id}>
-                                <b className={x.type}>{x.text}</b>
+                                <b className={x.type}>
+                                    {x.value !== undefined ? x.text + " (" + x.value + ")" : x.text}
+                                </b>
                                 <br />
                             </React.Fragment>
                         ))}
