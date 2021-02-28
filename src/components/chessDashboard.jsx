@@ -184,9 +184,9 @@ class ChessDashboard extends Component {
 
         this.ChangeStatusLine("computationFinished", StatusBar.Active, null, timeInSec + "s");
 
-        toast.info(
+        /*  toast.info(
             `computation with task_id: ${taskId} \nfinished in : ${time} + ms  \n(~ ${timeInSec}s )`,
-        );
+        );*/
     };
     handleGameFinished = (params) => {
         const { winner, type } = params;
@@ -235,9 +235,9 @@ class ChessDashboard extends Component {
         const { move, depth, time } = bestmove;
         console.log("move event...");
         console.log(move);
-        if (move !== "test")
+        /*  if (move !== "test")
             toast.info("move : " + move + "\ndepth : " + depth + "\ntime: " + time);
-
+*/
         this.ChangeStatusLine("sendChessMove", StatusBar.Active, null, move);
     };
     handleProviderFailed = (provider) => {
