@@ -1,6 +1,6 @@
 export const PlayerEnum = {
-    white: 1,
-    black: 2,
+    white: "white",
+    black: "black",
 };
 
 export const StatusEnum = {
@@ -11,6 +11,7 @@ export const StatusEnum = {
     game_end: 5,
     wednesday: 6,
 };
+export const GameType = { GolemVsGolem: "Golem vs Golem", PlayerVsGolem: "Player vs Golem" };
 
 export const StatusBar = {
     Active: "golemStatusActive",
