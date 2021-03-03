@@ -107,6 +107,7 @@ class ChessDashboard extends Component {
             playerColor: PlayerEnum.white,
             gameType: gameType,
         });
+        this.game = new Chess();
         console.log("state reseted");
     };
 
@@ -469,7 +470,6 @@ class ChessDashboard extends Component {
     render() {
         return (
             <div>
-                <h1>{this.state.fen}</h1>
                 <div>
                     <CardGroup>
                         <NewGame
