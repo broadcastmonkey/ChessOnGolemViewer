@@ -301,7 +301,7 @@ class ChessDashboard extends Component {
     };
 
     handleCurrentTurnEvent = (params) => {
-        const { taskId, gameStep: moveNumber, turnId, depth, gameId } = params;
+        const { taskId, stepId: moveNumber, turnId, depth, gameId } = params;
         if (gameId !== this.state.gameId) return;
         this.setState({
             taskId,
@@ -322,6 +322,7 @@ class ChessDashboard extends Component {
         if (gameId !== this.state.gameId) return;
 
         console.log("chess pos", position);
+        this.game.load(position);
         this.setState({ fen: position });
     };
     handleMoveEvent = (moveData) => {
@@ -456,10 +457,14 @@ class ChessDashboard extends Component {
         });
 
     isPlayerAllowedToMove = () => {
-        return (
+        console.log("color:" + this.state.playerColor);
+        console.log("turn:" + this.state.turn);
+        console.log("game:" + this.state.gameType);
+        const res =
             this.state.gameType === GameType.PlayerVsGolem &&
-            this.state.playerColor === this.state.turn
-        );
+            this.state.playerColor === this.state.turn;
+        console.log("eq: " + res);
+        return res;
     };
     render() {
         return (
@@ -478,6 +483,7 @@ class ChessDashboard extends Component {
                             moveNumber={this.state.moveNumber}
                             depth={this.state.depth}
                             secondsComputing={this.state.secondsComputing}
+                            gameId={this.state.gameId}
                             taskId={this.state.taskId}
                             status={this.state.status}
                             statusStats={this.state.statusStats}

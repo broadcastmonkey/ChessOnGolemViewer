@@ -11,7 +11,7 @@ class NewGame extends Component {
         return (
             <Card bg="light" text="dark" style={{ width: "64" }} className="mb-2 mt-2">
                 <Card.Header>
-                    <h2>Play againt Golem!</h2>
+                    <h2>Play against Golem!</h2>
                 </Card.Header>
                 <Card.Body>
                     <Card.Title>

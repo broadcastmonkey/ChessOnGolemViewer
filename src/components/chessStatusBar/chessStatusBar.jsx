@@ -5,12 +5,12 @@ import { Card } from "react-bootstrap";
 
 class ChessStatusBar extends Component {
     render() {
-        const { turn, moveNumber, depth, secondsComputing, taskId } = this.props;
+        const { turn, moveNumber, depth, secondsComputing, taskId, gameId } = this.props;
 
         return (
             <Card bg="info" text="light" style={{ width: "512" }} className="mb-2 mt-2">
                 <Card.Header>
-                    <h2>Game state</h2>
+                    <h2>Game state / id: {gameId}</h2>
                 </Card.Header>
                 <Card.Body>
                     <Card.Title>
