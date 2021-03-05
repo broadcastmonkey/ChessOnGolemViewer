@@ -20,7 +20,7 @@ class GolemStatusBar extends Component {
     }
 
     render() {
-        const { status, statusLines } = this.props;
+        const { statusLines } = this.props;
         var first = statusLines.slice(0, statusLines.length / 2);
         var second = statusLines.slice(statusLines.length / 2 + 1);
 

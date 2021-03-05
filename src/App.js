@@ -8,35 +8,35 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import NotFound from "./components/notFound";
 
-import ChessDashboard from "./components/chessDashboard";
+import ChessGame from "./components/chessGame/chessGame";
+import LandingPage from "./components/landingPage/landingPage";
 
 class App extends Component {
-  state = {};
+    state = {};
 
-  componentDidMount() {}
-  render() {
-    let speedway = "container-fluid";
-    //speedway += document.location.pathname.includes("speedway") ? "2" : "";
+    componentDidMount() {}
+    render() {
+        let speedway = "container-fluid";
+        //speedway += document.location.pathname.includes("speedway") ? "2" : "";
 
-    return (
-      <React.Fragment>
-        <ToastContainer />
+        return (
+            <React.Fragment>
+                <ToastContainer />
 
-        <main className={speedway}>
-          <NavBar />{" "}
-          <Switch>
-            {/* <Route path="/register" component={RegisterForm} /> */}
+                <main className={speedway}>
+                    <NavBar />{" "}
+                    <Switch>
+                        {/* <Route path="/register" component={RegisterForm} /> */}
 
-            <Route path="/chess" component={ChessDashboard} />
-
-            <Route path="/not-found" component={NotFound} />
-            <Route path="/" exact component={ChessDashboard} />
-            <Redirect to="/not-found" />
-          </Switch>
-        </main>
-      </React.Fragment>
-    );
-  }
+                        <Route path="/not-found" component={NotFound} />
+                        <Route path="/game/:gameId" exact component={ChessGame} />
+                        <Route path="/" exact component={LandingPage} />
+                        <Redirect to="/not-found" />
+                    </Switch>
+                </main>
+            </React.Fragment>
+        );
+    }
 }
 
 export default App;

@@ -1,9 +1,6 @@
-import { Button } from "react-bootstrap";
 import React, { Component } from "react";
-import { Card } from "react-bootstrap";
 
-//import "./golemStatusBar.css";
-import { PlayerEnum, GameType } from "./../../enums";
+import { GameType } from "./../../enums";
 
 class TurnInfo extends Component {
     render() {
