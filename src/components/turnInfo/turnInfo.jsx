@@ -4,10 +4,17 @@ import { GameType } from "./../../enums";
 
 class TurnInfo extends Component {
     render() {
-        const { currentPlayer, gameType, playerColor } = this.props;
+        const { currentPlayer, gameType, playerColor, winner, winnerType } = this.props;
         let txt = "It's Golem's turn";
         let className = "bg-warning";
-        if (gameType === GameType.GolemVsGolem) {
+        if (winnerType !== "") {
+            className = "text-white bg-success";
+            if (winner !== "") {
+                txt = `Checkmate! ${winner} player wins!`;
+            } else {
+                txt = "DRAW";
+            }
+        } else if (gameType === GameType.GolemVsGolem) {
             txt = "Golem is playing against itself";
             className = "text-white bg-info";
         } else if (playerColor === currentPlayer) {

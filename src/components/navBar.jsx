@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import socket from "./../services/socketService";
 import SignalStrengthIcon from "./common/socketsio/signalStrengthIcon";
-import { withRouter } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 
 class NavBar extends Component {
     state = {
@@ -108,9 +108,14 @@ class NavBar extends Component {
                         signalValue={this.state.signalValue}
                         additionalText={this.state.connectionAdditionalText}
                     />{" "}
-                    <h4 style={{ margin: 0, marginLeft: 20, color: "white" }}>
+                    <h4 style={{ margin: 0, marginLeft: 20, marginRight: 20, color: "white" }}>
                         Chess on Golem / alpha iv
-                    </h4>
+                    </h4>{" "}
+                    <div className="navbar-nav w-200">
+                        <NavLink className="nav-item nav-link" to="/">
+                            Dashboard
+                        </NavLink>
+                    </div>
                 </nav>
             )
         );

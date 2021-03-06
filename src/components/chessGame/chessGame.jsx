@@ -19,6 +19,9 @@ import TurnInfo from "../turnInfo/turnInfo";
 class ChessGame extends Component {
     getDefaultStateObject = (newGameId, gameType) => {
         return {
+            winner: "",
+            winnerType: "",
+            isGameFinished: false,
             loadingTitle: "",
             fen: "start",
             gameLoaded: false,
@@ -106,10 +109,13 @@ class ChessGame extends Component {
         socket.on("newGameCreated", this.handleNewGameCreated);
         socket.on("gameData", this.handleGameData);
 
-        socket.on("connect", (data) => {
+        if (socket.connected) {
             socket.emit("getGameData", { gameId });
-            console.log("emit " + gameId);
-        });
+        } else
+            socket.on("connect", (data) => {
+                socket.emit("getGameData", { gameId });
+                console.log("emit " + gameId);
+            });
         // setTimeout(() => {
 
         //}, 1000);
@@ -119,6 +125,9 @@ class ChessGame extends Component {
         console.log("loading data:");
         console.log(data);
         this.setState({
+            winner: data.winner,
+            winnerType: data.winnerType,
+            isGameFinished: data.isGameFinished,
             fen: data.fen,
             gameLoaded: true,
             turn: data.globalTurn,
@@ -127,9 +136,10 @@ class ChessGame extends Component {
             gameId: data.gameId,
             stepId: data.stepId,
             moves: data.moves,
+            black_stats: getMoveStats(data.moves, PlayerEnum.black),
+            white_stats: getMoveStats(data.moves, PlayerEnum.white),
             statusLines: createStatusLines(),
-            white_stats: createDefaultStats(),
-            black_stats: createDefaultStats(),
+
             isNewGameButtononDisabled: false,
             dropSquareStyle: {},
             squareStyles: {},
@@ -146,9 +156,8 @@ class ChessGame extends Component {
             this.setState({ loadingTitle: "Can't find game with given id" });
         } else {
             this.loadGame(data.result);
+            console.log("load game: " + data.result.gameId);
         }
-
-        console.log("load game: " + data.result.gameId);
     };
     handleNewGameCreated = (data) => {
         const { gameId } = data;
@@ -474,6 +483,8 @@ class ChessGame extends Component {
                                 </div>
                                 <div>
                                     <TurnInfo
+                                        winner={this.state.winner}
+                                        winnerType={this.state.winnerType}
                                         currentPlayer={this.state.turn}
                                         gameType={this.state.gameType}
                                         playerColor={this.state.playerColor}
