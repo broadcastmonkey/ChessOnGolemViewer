@@ -116,14 +116,12 @@ class ChessGame extends Component {
                 socket.emit("getGameData", { gameId });
                 console.log("emit " + gameId);
             });
-        // setTimeout(() => {
-
-        //}, 1000);
     }
 
     loadGame = (data) => {
         console.log("loading data:");
         console.log(data);
+
         this.setState({
             winner: data.winner,
             winnerType: data.winnerType,
@@ -149,6 +147,7 @@ class ChessGame extends Component {
             playerColor: data.playerColor,
             gameType: data.gameType,
         });
+        this.game.load(data.fen);
     };
     handleGameData = (data) => {
         const { status } = data;
@@ -249,16 +248,17 @@ class ChessGame extends Component {
         this.ChangeStatusLine("computationFinished", StatusBar.Active, null, timeInSec + "s");
     };
     handleGameFinished = (params) => {
-        const { winner, type, gameId } = params;
+        const { winner, winnerType, gameId } = params;
         if (gameId !== this.state.gameId) return;
         this.status = StatusEnum.game_end;
         this.setState({
-            status: "Game Finished!",
-            statusStats: type === "draw" ? "DRAW" : winner + " PLAYER WINS",
+            winner,
+            winnerType,
         });
     };
 
     handleMovesRefreshed = (incoming) => {
+        console.log("id id id ");
         const { gameId, movesData } = incoming;
         if (gameId !== this.state.gameId) return;
         let moves = [];
