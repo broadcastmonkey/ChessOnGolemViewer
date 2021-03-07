@@ -102,21 +102,23 @@ class NavBar extends Component {
     render() {
         return (
             this.state.navBarVisible && (
-                <nav className="navbar navbar-expand-lg navbar-dark bg-dark w-100">
-                    <SignalStrengthIcon
-                        label=""
-                        signalValue={this.state.signalValue}
-                        additionalText={this.state.connectionAdditionalText}
-                    />{" "}
-                    <h4 style={{ margin: 0, marginLeft: 20, marginRight: 20, color: "white" }}>
-                        Chess on Golem / alpha iv
-                    </h4>{" "}
-                    <div className="navbar-nav w-200">
-                        <NavLink className="nav-item nav-link" to="/">
-                            Dashboard
-                        </NavLink>
-                    </div>
-                </nav>
+                <div>
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark w-100">
+                        <h4 style={{ margin: 0, marginLeft: 0, marginRight: 20, color: "white" }}>
+                            Chess on Golem / alpha iv
+                        </h4>{" "}
+                        <div className="navbar-nav w-200">
+                            <NavLink className="nav-item nav-link" to="/">
+                                Dashboard
+                            </NavLink>
+                        </div>{" "}
+                        <SignalStrengthIcon
+                            label=""
+                            signalValue={this.state.signalValue}
+                            additionalText={this.state.connectionAdditionalText}
+                        />{" "}
+                    </nav>
+                </div>
             )
         );
     }

@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import GenericTable from "./common/table/genericTable";
 
-import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 class GamesTable extends Component {
     columns = [
+        {
+            path: "_id",
+
+            visible: false,
+        },
         {
             path: "gameId",
             label: "id",
@@ -24,12 +28,14 @@ class GamesTable extends Component {
     ];
 
     render() {
-        const { games } = this.props;
+        const { games, rowClick } = this.props;
+        games.forEach((x) => (x._id = x.gameId));
 
         return (
             <GenericTable
                 columns={this.columns}
                 data={games}
+                rowOnClick={rowClick}
                 //sortColumn={sortColumn}
                 //onSort={onSort}
             />

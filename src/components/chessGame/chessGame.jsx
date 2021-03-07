@@ -87,8 +87,6 @@ class ChessGame extends Component {
     componentDidMount() {
         let { gameId } = this.props.match.params;
         console.log("str id #" + gameId + "#");
-        gameId = parseInt(gameId);
-        this.setState({ gameId });
 
         this.game = new Chess();
         socket.on("calculationRequested", this.handlecalculationRequested);
@@ -109,13 +107,24 @@ class ChessGame extends Component {
         socket.on("newGameCreated", this.handleNewGameCreated);
         socket.on("gameData", this.handleGameData);
 
-        if (socket.connected) {
-            socket.emit("getGameData", { gameId });
-        } else
-            socket.on("connect", (data) => {
+        if (gameId === "new") {
+            if (socket.connected) {
+                socket.emit("newGameRequest", this.handleNewGameRequest);
+            } else
+                socket.on("connect", (data) => {
+                    socket.emit("newGameRequest", this.handleNewGameRequest);
+                });
+        } else {
+            gameId = parseInt(gameId);
+            this.setState({ gameId });
+
+            if (socket.connected) {
                 socket.emit("getGameData", { gameId });
-                console.log("emit " + gameId);
-            });
+            } else
+                socket.on("connect", (data) => {
+                    socket.emit("getGameData", { gameId });
+                });
+        }
     }
 
     loadGame = (data) => {
@@ -162,7 +171,10 @@ class ChessGame extends Component {
         const { gameId } = data;
 
         console.log("new game created: " + gameId);
-        this.resetState(gameId, GameType.PlayerVsGolem);
+
+        this.props.history.push("/game/" + gameId);
+        socket.emit("getGameData", { gameId });
+        //this.resetState(gameId, GameType.PlayerVsGolem);
     };
 
     SetAllStatusLinesInactive = () => {
@@ -206,7 +218,7 @@ class ChessGame extends Component {
     };
 
     handleProposalsReceived = (params) => {
-        console.log("proposals:", params);
+        //console.log("proposals:", params);
         const { proposalsCount, gameId } = params;
         if (gameId !== this.state.gameId) return;
         this.ChangeStatusLine("proposalsReceived", StatusBar.Active, null, proposalsCount);
@@ -226,7 +238,7 @@ class ChessGame extends Component {
         if (gameId !== this.state.gameId) return;
         this.ChangeStatusLine("agreementConfirmed", StatusBar.Active, null, providerName);
         this.confirmedWorkers++;
-        console.log("confirmed workers: " + this.confirmedWorkers);
+        // console.log("confirmed workers: " + this.confirmedWorkers);
         this.status = StatusEnum.provider_confirmed;
     };
     handleScriptSent = (params) => {
@@ -258,7 +270,7 @@ class ChessGame extends Component {
     };
 
     handleMovesRefreshed = (incoming) => {
-        console.log("id id id ");
+        //console.log("id id id ");
         const { gameId, movesData } = incoming;
         if (gameId !== this.state.gameId) return;
         let moves = [];
