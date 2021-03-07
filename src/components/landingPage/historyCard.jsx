@@ -2,8 +2,6 @@ import { Button } from "react-bootstrap";
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 
-import { GameType } from "../../enums";
-import GameIcon from "../gameIcon";
 import { Link } from "react-router-dom";
 
 class HistoryCard extends Component {
@@ -30,15 +28,6 @@ class HistoryCard extends Component {
         );
     };
     render() {
-        const {
-            activeGamesCount,
-            totalGamesCount,
-            golemVsGolemGamesCount,
-            playerVsGolemGamesCount,
-            isGolemVsGolemActive,
-            golemVsGolemGameId,
-        } = this.props;
-
         return (
             <Card bg="light" text="dark" className="mb-2 mt-2 ml-2">
                 <Card.Header>

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 
 import { GameType } from "./../../enums";
-import GameIcon from "./../GameIcon";
+import GameIcon from "../gameIcon";
 import { Link } from "react-router-dom";
 
 class StatsCard extends Component {
