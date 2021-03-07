@@ -5,28 +5,6 @@ import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 class HistoryCard extends Component {
-    renderGolemVsGolemInfo = (isActive, gameId) => {
-        if (isActive) {
-            return (
-                <React.Fragment>
-                    Golem vs Golem game is happenig right now
-                    <Link to={"/game/" + gameId}>
-                        <Button className="ml-4" variant="primary">
-                            Click here to see it
-                        </Button>
-                    </Link>
-                </React.Fragment>
-            );
-        }
-        return (
-            <React.Fragment>
-                Next Golem vs Golem game starts automatically in 20 sec.
-                <Button className="ml-4" variant="primary">
-                    Request it now
-                </Button>
-            </React.Fragment>
-        );
-    };
     render() {
         return (
             <Card bg="light" text="dark" className="mb-2 mt-2 ml-2">

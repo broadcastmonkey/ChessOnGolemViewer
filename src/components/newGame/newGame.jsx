@@ -21,11 +21,7 @@ class NewGame extends Component {
                             </Button>
                         </b>
                     </Card.Title>
-                    <Card.Text>
-                        Currently there are 0 games running.
-                        <br />
-                        256 games played against golem.
-                    </Card.Text>
+                    <Card.Text>Test your skills against Golem Network!</Card.Text>
                 </Card.Body>
             </Card>
         );

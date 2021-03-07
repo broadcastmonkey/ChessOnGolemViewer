@@ -17,6 +17,7 @@ class LandingPage extends Component {
     };
     componentDidMount() {
         socket.on("gamesData", this.handleGamesData);
+        socket.on("newGolemVsGolemGame", this.handleNewGolemVsGolemGame);
         if (socket.connected) {
             socket.emit("getGames");
             console.log("connected and get games");
@@ -29,6 +30,10 @@ class LandingPage extends Component {
     componentWillUnmount() {
         socket.removeListener("gamesData", this.handleGamesData);
     }
+    handleNewGolemVsGolemGame = (data) => {
+        const { gameId } = data;
+        this.props.history.push("/game/" + gameId);
+    };
     handleGamesData = (data) => {
         console.log(data);
         const totalGamesCount = data.games.length;
@@ -64,6 +69,9 @@ class LandingPage extends Component {
     handleRowClick = (gameId) => {
         console.log("clcied " + gameId);
         this.props.history.push("/game/" + gameId);
+    };
+    handleRequestNewGolemVsGolemGame = () => {
+        socket.emit("newGolemVsGolemGameRequest");
     };
     render() {
         return (

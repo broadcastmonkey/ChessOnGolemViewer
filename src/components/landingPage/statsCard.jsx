@@ -1,7 +1,6 @@
 import { Button } from "react-bootstrap";
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
-
 import { GameType } from "./../../enums";
 import GameIcon from "../gameIcon";
 import { Link } from "react-router-dom";
@@ -22,7 +21,7 @@ class StatsCard extends Component {
         }
         return (
             <React.Fragment>
-                Next Golem vs Golem game starts automatically in 20 sec.
+                At the moment no golem vs golem game is happening...
                 <Button className="ml-4" variant="primary">
                     Request it now
                 </Button>
