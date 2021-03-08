@@ -6,7 +6,7 @@ import GameIcon from "../gameIcon";
 import { Link } from "react-router-dom";
 
 class StatsCard extends Component {
-    renderGolemVsGolemInfo = (isActive, gameId) => {
+    renderGolemVsGolemInfo = (isActive, gameId, requestGameCallback) => {
         if (isActive) {
             return (
                 <React.Fragment>
@@ -22,7 +22,7 @@ class StatsCard extends Component {
         return (
             <React.Fragment>
                 At the moment no golem vs golem game is happening...
-                <Button className="ml-4" variant="primary">
+                <Button className="ml-4" variant="primary" onClick={requestGameCallback}>
                     Request it now
                 </Button>
             </React.Fragment>
@@ -36,6 +36,7 @@ class StatsCard extends Component {
             playerVsGolemGamesCount,
             isGolemVsGolemActive,
             golemVsGolemGameId,
+            requestGameCallback,
         } = this.props;
 
         return (
@@ -56,7 +57,11 @@ class StatsCard extends Component {
                         <br />- {playerVsGolemGamesCount} <i>human vs golem</i> games{" "}
                         <GameIcon type={GameType.PlayerVsGolem} />
                         <hr />
-                        {this.renderGolemVsGolemInfo(isGolemVsGolemActive, golemVsGolemGameId)}
+                        {this.renderGolemVsGolemInfo(
+                            isGolemVsGolemActive,
+                            golemVsGolemGameId,
+                            requestGameCallback,
+                        )}
                         <br />
                         <hr />
                         <br />

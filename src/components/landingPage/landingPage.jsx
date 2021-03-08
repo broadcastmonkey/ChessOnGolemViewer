@@ -103,6 +103,7 @@ class LandingPage extends Component {
                             activeGamesCount={this.state.activeGamesCount}
                             golemVsGolemGameId={this.state.golemVsGolemGameId}
                             isGolemVsGolemActive={this.state.isGolemVsGolemActive}
+                            requestGameCallback={this.handleRequestNewGolemVsGolemGame}
                         />
                         <Card bg="light" text="dark" className="mb-2 mt-2 ml-2">
                             <Card.Header>
