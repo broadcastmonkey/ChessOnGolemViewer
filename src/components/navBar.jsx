@@ -7,7 +7,7 @@ class NavBar extends Component {
     state = {
         collapsed: true,
         signalValue: 0,
-        connectionAdditionalText: "",
+        connectionAdditionalText: "connecting to backend server ... ",
         forceSignalVisible: false,
         intervalId: undefined,
         currentCount: 10,
@@ -86,7 +86,7 @@ class NavBar extends Component {
             currentCount,
             connectionAdditionalText:
                 currentCount > 0
-                    ? `Trying to connect in ${currentCount} seconds...`
+                    ? `Connection to backend server lost. Trying to connect in ${currentCount} seconds...`
                     : "Trying to connect to server...",
         });
     };
@@ -105,7 +105,7 @@ class NavBar extends Component {
                 <div>
                     <nav className="navbar navbar-expand-lg navbar-dark bg-dark w-100">
                         <h4 style={{ margin: 0, marginLeft: 0, marginRight: 20, color: "white" }}>
-                            Chess on Golem / alpha iv
+                            Chess on Golem / beta.1
                         </h4>{" "}
                         <div className="navbar-nav w-200">
                             <NavLink className="nav-item nav-link" to="/">

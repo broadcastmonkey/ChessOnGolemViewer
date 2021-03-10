@@ -29,6 +29,7 @@ class LandingPage extends Component {
     }
     componentWillUnmount() {
         socket.removeListener("gamesData", this.handleGamesData);
+        socket.removeListener("newGolemVsGolemGame", this.handleNewGolemVsGolemGame);
     }
     handleNewGolemVsGolemGame = (data) => {
         const { gameId } = data;
