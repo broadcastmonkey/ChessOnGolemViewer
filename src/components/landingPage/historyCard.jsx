@@ -1,20 +1,24 @@
 import { Button, Dropdown } from "react-bootstrap";
-import React, { Component } from "react";
+import React from "react";
 import { Card } from "react-bootstrap";
-import Auth, { login } from "../../services/authService";
+import Auth from "../../services/authService";
 import socket from "../../services/socketService";
-import { Link } from "react-router-dom";
 import Form from "./../common/forms/form";
 import Joi from "joi-browser";
 import { Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
+
+import "./historyCard.css";
+
 class HistoryCard extends Form {
     state = {
         data: { login: "", passphrase: "" },
         dataReRegister: { login: "", password: "" },
         nick: "",
-        loginVisible: true,
+        loginVisible: 1,
         registrationInfo: "",
         loginInfo: "",
+        difficultyLevel: "beginner",
         errors: {},
         showModal: false,
     };
@@ -28,8 +32,8 @@ class HistoryCard extends Form {
         socket.on("loginUser", this.handleLoginUser);
 
         const user = Auth.getCurrentUser();
-        console.log("user");
-        console.log(user);
+        // console.log("user");
+        // console.log(user);
         if (user !== null) this.setState({ nick: user.login });
     };
     componentWillUnmount() {
@@ -37,13 +41,13 @@ class HistoryCard extends Form {
         socket.removeListener("loginUser", this.handleLoginUser);
     }
     handleRegisterUser = (data) => {
-        const { status, msg, jwt, login } = data;
+        const { status, login } = data;
         if (status === 201) {
             Auth.loginSucceful(data.jwt);
             this.setState({ registrationInfo: "registration succesful" });
             const user = Auth.getCurrentUser();
-            console.log("user");
-            console.log(user);
+            // console.log("user");
+            //  console.log(user);
             if (user !== null) this.setState({ nick: user.login });
         } else if (status === 409) {
             this.setState({
@@ -117,45 +121,146 @@ class HistoryCard extends Form {
             </div>
         );
     };
+    renderDifficultyDropDown = () => {
+        return (
+            <Dropdown style={{ float: "right" }}>
+                <Dropdown.Toggle variant="secondary" id="difficulty-level">
+                    {this.state.difficultyLevel}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => this.setState({ difficultyLevel: "beginner" })}>
+                        beginner
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                        /*style={{ backgroundColor: "red" }}*/
+                        onClick={() => this.setState({ difficultyLevel: "casual player" })}
+                    >
+                        casual player
+                    </Dropdown.Item>{" "}
+                    <Dropdown.Item
+                        onClick={() => this.setState({ difficultyLevel: "experienced" })}
+                    >
+                        experienced
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                        onClick={() => this.setState({ difficultyLevel: "chess master" })}
+                    >
+                        chess master
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                        onClick={() => this.setState({ difficultyLevel: "grandmaster" })}
+                    >
+                        grandmaster
+                    </Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+        );
+    };
+    getDepth = () => {
+        switch (this.state.difficultyLevel) {
+            case "beginner":
+                return 1;
+            case "casual player":
+                return 4;
+            case "experienced":
+                return 8;
+            case "chess master":
+                return 12;
+            case "grandmaster":
+                return 18;
+            default:
+                return 1;
+        }
+    };
+    renderPlayButton = () => {
+        return (
+            <React.Fragment>
+                {" "}
+                {this.renderDifficultyDropDown()}
+                <Link style={{ float: "right" }} to={"/game/new/" + this.getDepth()}>
+                    <Button variant="primary">Start new game against golem </Button>
+                </Link>{" "}
+            </React.Fragment>
+        );
+    };
+    renderPlayGuestButton = () => {
+        return (
+            <React.Fragment>
+                <div
+                    className="d-flex justify-content-center"
+                    style={{ marginTop: 40, marginBottom: 10 }}
+                >
+                    <b>or set difficulty level</b>
+                </div>{" "}
+                <div
+                    className="d-flex justify-content-center"
+                    style={{ marginTop: 10, marginBottom: 10 }}
+                >
+                    {this.renderDifficultyDropDown()}
+                </div>
+                <div
+                    className="d-flex justify-content-center"
+                    style={{ marginTop: 20, marginBottom: 40 }}
+                >
+                    <Link to={"/game/new/" + this.getDepth()}>
+                        <Button variant="primary">and start game as a guest</Button>
+                    </Link>{" "}
+                </div>
+            </React.Fragment>
+        );
+    };
+
     renderNotLoggedIn = () => {
         return (
             <Card bg="light" text="dark" className="mb-2 mt-2 ml-2">
                 <Card.Header>
-                    <h2>
-                        Play against golem
-                        <Link to="/game/new">
-                            <Button style={{ float: "right" }} variant="primary">
-                                Start game as a guest
-                            </Button>
-                        </Link>
-                    </h2>{" "}
+                    <h2>Play against golem</h2>{" "}
                 </Card.Header>
                 <Card.Body>
                     <Card.Title>
-                        <b>
+                        <h4>
                             For best experience{" "}
-                            <Link
+                            <button
+                                className="as-link btn-link"
                                 onClick={() => {
-                                    this.setState({ loginVisible: true });
+                                    this.setState({ loginVisible: 1 });
                                 }}
                             >
                                 log in
-                            </Link>{" "}
+                            </button>{" "}
                             or{" "}
-                            <Link
+                            <button
+                                className="as-link btn-link"
                                 onClick={() => {
-                                    this.setState({ loginVisible: false });
+                                    this.setState({ loginVisible: 2 });
                                 }}
                             >
                                 claim nick
-                            </Link>
-                        </b>
+                            </button>
+                        </h4>
                     </Card.Title>
-                    <Card.Text>
-                        {this.state.loginVisible === true
-                            ? this.renderLoginControls()
-                            : this.renderRegisterControls()}
-                    </Card.Text>
+
+                    {this.state.loginVisible === 1 && this.renderLoginControls()}
+                    {this.state.loginVisible === 2 && this.renderRegisterControls()}
+                    {this.state.loginVisible === 3 && this.renderPlayGuestButton()}
+
+                    {this.state.loginVisible !== 3 && (
+                        <div>
+                            <hr />
+                            <h6 style={{ float: "right" }}>
+                                You can also
+                                <button
+                                    className="as-link btn-link"
+                                    onClick={() => {
+                                        this.setState({ loginVisible: 3 });
+                                    }}
+                                >
+                                    play as guest
+                                </button>
+                            </h6>
+                        </div>
+                    )}
                 </Card.Body>
             </Card>
         );
@@ -178,7 +283,7 @@ class HistoryCard extends Form {
                     <Card.Header>
                         <h2>
                             <Dropdown style={{ width: 200, float: "left" }}>
-                                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                <Dropdown.Toggle variant="info" id="dropdown-basic">
                                     {this.state.nick}
                                 </Dropdown.Toggle>
 
@@ -194,11 +299,7 @@ class HistoryCard extends Form {
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <Link style={{ width: 100, height: 20 }} to="/game/new">
-                                <Button style={{ float: "right" }} variant="primary">
-                                    Play against golem
-                                </Button>
-                            </Link>
+                            {this.renderPlayButton()}
                         </h2>{" "}
                     </Card.Header>
                     <Card.Body>

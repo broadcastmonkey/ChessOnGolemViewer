@@ -1,0 +1,14 @@
+button.as-link {
+    border: 0px;
+    border-style: none;
+    background: none;
+    outline: none;
+    box-shadow: none !important;
+}
+button.as-link:focus {
+    border: 0px;
+    border-style: none;
+    background: none;
+    outline: none;
+    box-shadow: none !important;
+}

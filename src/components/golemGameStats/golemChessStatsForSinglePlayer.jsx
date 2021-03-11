@@ -22,21 +22,25 @@ class GolemChessStatsForSinglePlayer extends Component {
                     <Card.Title>Statistics: </Card.Title>
                     <Card.Text>
                         <i>total moves:</i> <b>{stats.total_moves}</b>
-                        <br />
-                        <i>avg depth:</i> <b>{stats.avg_depth}</b>
-                        <br />
-                        <i>total vm time:</i> <b>{stats.total_vm_time}s</b>
-                        <br />
-                        <i>avg vm time:</i> <b>{stats.avg_vm_time}s</b>
-                        <br />
-                        <i>total golem time:</i> <b>{stats.total_time}s</b>
-                        <br />
-                        <i>avg golem time:</i> <b>{stats.avg_golem_time}s</b>
-                        <br />
-                        <i>best golem time:</i> <b>{stats.best_golem_time}s</b>
-                        <br />
-                        <i>total golem cost:</i> <b>{stats.total_cost}</b>
-                        <br />
+                        {stats.displayOtherStats && (
+                            <React.Fragment>
+                                <br />
+                                <i>avg depth:</i> <b>{stats.avg_depth}</b>
+                                <br />
+                                <i>total vm time:</i> <b>{stats.total_vm_time}s</b>
+                                <br />
+                                <i>avg vm time:</i> <b>{stats.avg_vm_time}s</b>
+                                <br />
+                                <i>total golem time:</i> <b>{stats.total_time}s</b>
+                                <br />
+                                <i>avg golem time:</i> <b>{stats.avg_golem_time}s</b>
+                                <br />
+                                <i>best golem time:</i> <b>{stats.best_golem_time}s</b>
+                                <br />
+                                <i>total golem cost:</i> <b>{stats.total_cost}</b>
+                                <br />
+                            </React.Fragment>
+                        )}
                     </Card.Text>
                 </Card.Body>
             </Card>

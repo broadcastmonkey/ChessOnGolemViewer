@@ -30,6 +30,7 @@ class App extends Component {
 
                         <Route path="/not-found" component={NotFound} />
                         <Route path="/game/:gameId" exact component={ChessGame} />
+                        <Route path="/game/:gameId/:depthLevel" exact component={ChessGame} />
                         <Route path="/" exact component={LandingPage} />
                         <Redirect to="/not-found" />
                     </Switch>

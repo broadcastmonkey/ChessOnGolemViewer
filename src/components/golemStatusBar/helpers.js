@@ -24,6 +24,7 @@ function createStatusLines() {
 
 function createDefaultStats() {
     return {
+        displayOtherStats: true,
         total_moves: 0,
         avg_depth: 0,
         total_vm_time: 0,

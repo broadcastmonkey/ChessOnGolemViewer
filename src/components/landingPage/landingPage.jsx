@@ -64,11 +64,11 @@ class LandingPage extends Component {
             isGolemVsGolemActive,
             golemVsGolemGameId,
         });
-        console.log(`allgames`);
-        console.log(this.state.allGames);
+        //  console.log(`allgames`);
+        //  console.log(this.state.allGames);
     };
     handleRowClick = (gameId) => {
-        console.log("clcied " + gameId);
+        //  console.log("clcied " + gameId);
         this.props.history.push("/game/" + gameId);
     };
     handleRequestNewGolemVsGolemGame = () => {

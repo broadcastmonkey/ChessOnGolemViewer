@@ -10,7 +10,7 @@ function defaultStatsObject() {
         best_golem_time: 0,
     };
 }
-function getMoveStats(moves, turn) {
+function getMoveStats(moves, turn, playerColor) {
     if (
         moves.length === 0 ||
         moves.filter((x) => x.turn === turn && x.move !== undefined).length === 0
@@ -19,6 +19,7 @@ function getMoveStats(moves, turn) {
     }
 
     let stats = {};
+    stats.displayOtherStats = turn !== playerColor;
     stats.total_moves = moves.filter((x) => x.turn === turn && x.move !== undefined).length;
     stats.avg_depth =
         moves

@@ -15,10 +15,15 @@ import { StatusEnum, StatusBar, PlayerEnum, GameType } from "../../enums";
 import NewGame from "../newGame/newGame";
 import Chess from "chess.js"; // import Chess from  "chess.js"(default) if recieving an error about new Chess() not being a constructor
 import TurnInfo from "../turnInfo/turnInfo";
+import auth from "../../services/authService";
+import { isClientOwnerOfGame } from "./../../services/authService";
 
 class ChessGame extends Component {
     getDefaultStateObject = (newGameId, gameType) => {
         return {
+            isClientOwnerOfGame: false,
+            playerLogin: "",
+
             winner: "",
             winnerType: "",
             isGameFinished: false,
@@ -58,7 +63,7 @@ class ChessGame extends Component {
         console.log("state reseted");
     };
 
-    state = this.getDefaultStateObject(1, GameType.GolemVsGolem);
+    state = this.getDefaultStateObject(0, GameType.GolemVsGolem);
 
     //    status = StatusEnum.none;
     confirmedWorkers = 0;
@@ -85,7 +90,8 @@ class ChessGame extends Component {
     };
 
     componentDidMount() {
-        let { gameId } = this.props.match.params;
+        let { gameId, depthLevel } = this.props.match.params;
+
         console.log("str id #" + gameId + "#");
 
         this.game = new Chess();
@@ -108,11 +114,22 @@ class ChessGame extends Component {
         socket.on("gameData", this.handleGameData);
 
         if (gameId === "new") {
+            if (depthLevel === undefined) depthLevel = 1;
+            else depthLevel = parseInt(depthLevel);
+
             if (socket.connected) {
-                socket.emit("newGameRequest", this.handleNewGameRequest);
+                socket.emit(
+                    "newGameRequest",
+                    { depth: depthLevel, token: auth.getAuthToken() },
+                    this.handleNewGameRequest,
+                );
             } else
                 socket.on("connect", (data) => {
-                    socket.emit("newGameRequest", this.handleNewGameRequest);
+                    socket.emit(
+                        "newGameRequest",
+                        { depth: depthLevel, token: auth.getAuthToken() },
+                        this.handleNewGameRequest,
+                    );
                 });
         } else {
             gameId = parseInt(gameId);
@@ -131,7 +148,12 @@ class ChessGame extends Component {
         console.log("loading data:");
         console.log(data);
 
+        const isClientOwnerOfGame = auth.isClientOwnerOfGame(data.playerLogin, data.secret);
+
         this.setState({
+            isClientOwnerOfGame,
+            playerLogin: data.playerLogin,
+
             winner: data.winner,
             winnerType: data.winnerType,
             isGameFinished: data.isGameFinished,
@@ -143,8 +165,8 @@ class ChessGame extends Component {
             gameId: data.gameId,
             stepId: data.stepId,
             moves: data.moves,
-            black_stats: getMoveStats(data.moves, PlayerEnum.black),
-            white_stats: getMoveStats(data.moves, PlayerEnum.white),
+            black_stats: getMoveStats(data.moves, PlayerEnum.black, data.playerColor),
+            white_stats: getMoveStats(data.moves, PlayerEnum.white, data.playerColor),
             statusLines: createStatusLines(),
 
             isNewGameButtononDisabled: false,
@@ -280,8 +302,8 @@ class ChessGame extends Component {
 
         this.setState({
             moves,
-            black_stats: getMoveStats(moves, PlayerEnum.black),
-            white_stats: getMoveStats(moves, PlayerEnum.white),
+            black_stats: getMoveStats(moves, PlayerEnum.black, this.state.playerColor),
+            white_stats: getMoveStats(moves, PlayerEnum.white, this.state.playerColor),
         });
     };
 
@@ -325,10 +347,10 @@ class ChessGame extends Component {
     };
 
     handleNewGameClick = () => {
-        console.log("disabling button");
+        /*  console.log("disabling button");
         socket.emit("newGameRequest", this.handleNewGameRequest);
 
-        this.setState({ isNewGameButtononDisabled: true });
+        this.setState({ isNewGameButtononDisabled: true });*/
     };
     removeHighlightSquare = () => {
         this.setState(({ pieceSquare, history }) => ({
@@ -368,12 +390,18 @@ class ChessGame extends Component {
 
         // illegal move
         if (move === null) return;
+
         this.setState(({ history, pieceSquare }) => ({
-            fen: this.game.fen(),
-            history: this.game.history({ verbose: true }),
+            /*fen: this.game.fen(),
+            history: this.game.history({ verbose: true }),*/
             squareStyles: squareStyling({ pieceSquare, history }),
         }));
-        socket.emit("newMove", { gameId: this.state.gameId, fen: this.game.fen(), move: moveData });
+        socket.emit("newMove", {
+            gameId: this.state.gameId,
+            fen: this.game.fen(),
+            move: moveData,
+            token: auth.getAuthToken(),
+        });
         // send move to server
     };
     onMouseOverSquare = (square) => {
@@ -436,6 +464,7 @@ class ChessGame extends Component {
         console.log("turn:" + this.state.turn);
         console.log("game:" + this.state.gameType);
         const res =
+            this.state.isClientOwnerOfGame &&
             this.state.gameType === GameType.PlayerVsGolem &&
             this.state.playerColor === this.state.turn;
         console.log("eq: " + res);
@@ -495,6 +524,8 @@ class ChessGame extends Component {
                                 </div>
                                 <div>
                                     <TurnInfo
+                                        playerLogin={this.state.playerLogin}
+                                        isClientOwner={this.state.isClientOwnerOfGame}
                                         winner={this.state.winner}
                                         winnerType={this.state.winnerType}
                                         currentPlayer={this.state.turn}
@@ -517,7 +548,10 @@ class ChessGame extends Component {
                 )}
                 {!this.state.gameLoaded && (
                     <div>
-                        <h1>loading game with id {this.state.gameId}</h1>
+                        {this.state.gameId === 0 && <h1>creating new game ...</h1>}
+                        {this.state.gameId !== 0 && (
+                            <h1>loading game with id {this.state.gameId}</h1>
+                        )}
                         <h2>{this.state.loadingTitle}</h2>
                     </div>
                 )}

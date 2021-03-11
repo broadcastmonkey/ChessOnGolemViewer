@@ -24,7 +24,7 @@ class TableBody extends Component {
                 {data.map((item) => (
                     <tr
                         style={rowOnClick !== undefined ? { cursor: "pointer" } : {}}
-                        key={item.stepId}
+                        key={item._id}
                         onClick={() => {
                             console.log("clicked");
                             if (rowOnClick !== undefined) {

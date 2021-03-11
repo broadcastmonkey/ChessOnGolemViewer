@@ -48,24 +48,22 @@ class StatsCard extends Component {
                     <Card.Title>
                         <b></b>
                     </Card.Title>
-                    <Card.Text>
-                        Currently there are {activeGamesCount} games running.
-                        <hr />
-                        {totalGamesCount} games played in total
-                        <br />- {golemVsGolemGamesCount} <i>golem vs golem</i> games{" "}
-                        <GameIcon type={GameType.GolemVsGolem} />
-                        <br />- {playerVsGolemGamesCount} <i>human vs golem</i> games{" "}
-                        <GameIcon type={GameType.PlayerVsGolem} />
-                        <hr />
-                        {this.renderGolemVsGolemInfo(
-                            isGolemVsGolemActive,
-                            golemVsGolemGameId,
-                            requestGameCallback,
-                        )}
-                        <br />
-                        <hr />
-                        <br />
-                    </Card.Text>
+                    Currently there are {activeGamesCount} games running.
+                    <hr />
+                    {totalGamesCount} games played in total
+                    <br />- {golemVsGolemGamesCount} <i>golem vs golem</i> games{" "}
+                    <GameIcon type={GameType.GolemVsGolem} />
+                    <br />- {playerVsGolemGamesCount} <i>human vs golem</i> games{" "}
+                    <GameIcon type={GameType.PlayerVsGolem} />
+                    <hr />
+                    {this.renderGolemVsGolemInfo(
+                        isGolemVsGolemActive,
+                        golemVsGolemGameId,
+                        requestGameCallback,
+                    )}
+                    <br />
+                    <hr />
+                    <br />
                 </Card.Body>
             </Card>
         );
