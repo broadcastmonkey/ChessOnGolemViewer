@@ -418,6 +418,7 @@ class ChessGame extends Component {
         // send move to server
     };
     onMouseOverSquare = (square) => {
+        if (!this.isPlayerAllowedToMove()) return;
         // get list of possible moves for this square
         let moves = this.game.moves({
             square: square,
@@ -544,6 +545,7 @@ class ChessGame extends Component {
                                         onDragOverSquare={this.onDragOverSquare}
                                         onSquareClick={this.onSquareClick}
                                         onSquareRightClick={this.onSquareRightClick}
+                                        allowDrag={this.isPlayerAllowedToMove}
                                     />
                                 </div>
                                 <div>
