@@ -494,7 +494,7 @@ class ChessGame extends Component {
     };
     handleRowClick = (rowId) => {
         //  console.log("clcied " + gameId);
-        toast.info("row " + rowId);
+        //toast.info("row " + rowId);
         this.setState({ fen: this.state.moves[rowId].fen });
     };
     render() {
