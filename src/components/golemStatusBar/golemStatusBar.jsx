@@ -25,7 +25,7 @@ class GolemStatusBar extends Component {
         var second = statusLines.slice(statusLines.length / 2 + 1);
 
         return (
-            <Card bg="light" text="dark" style={{ width: "512" }} className="mb-2 mt-2">
+            <Card bg="light" text="dark" style={{ width: "512" }} className="mb-2">
                 <Card.Header>
                     <h2>Golem status</h2>
                 </Card.Header>

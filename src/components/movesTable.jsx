@@ -26,7 +26,7 @@ class MovesTable extends Component {
         { path: "vm_time", label: "vm time [s]", format: { precision: 3, division: 1000 } },
         { path: "total_time", label: "total time [s]", format: { precision: 3, division: 1000 } },
         { path: "offers_count", label: "proposals" },
-        { path: "cost", label: "cost" },
+        { path: "cost", label: "cost [glm]", format: { precision: 8, division: 1 } },
     ];
 
     render() {

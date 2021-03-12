@@ -16,7 +16,7 @@ class ChessStatusBar extends Component {
         } = this.props;
 
         return (
-            <Card bg="info" text="light" style={{ width: "512" }} className="mb-2 mt-2">
+            <Card bg="info" text="light" style={{ width: "512" }} className="mb-2">
                 <Card.Header>
                     <h2>Game state</h2>
                 </Card.Header>

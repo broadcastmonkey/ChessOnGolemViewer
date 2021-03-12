@@ -41,6 +41,7 @@ class ChessGame extends Component {
             white_stats: createDefaultStats(),
             black_stats: createDefaultStats(),
             isNewGameButtononDisabled: false,
+            historyVisible: false,
             // square styles for active drop square
             dropSquareStyle: {},
             // custom square styles
@@ -482,28 +483,64 @@ class ChessGame extends Component {
         });
 
     isPlayerAllowedToMove = () => {
-        console.log("color:" + this.state.playerColor);
-        console.log("turn:" + this.state.turn);
-        console.log("game:" + this.state.gameType);
+        // console.log("color:" + this.state.playerColor);
+        //  console.log("turn:" + this.state.turn);
+        //  console.log("game:" + this.state.gameType);
         const res =
             this.state.isClientOwnerOfGame &&
             this.state.gameType === GameType.PlayerVsGolem &&
             this.state.playerColor === this.state.turn;
-        console.log("eq: " + res);
+        //console.log("eq: " + res);
         return res;
     };
     handleRowClick = (rowId) => {
-        //  console.log("clcied " + gameId);
-        //toast.info("row " + rowId);
         this.setState({ fen: this.state.moves[rowId].fen });
     };
     render() {
         return (
             <div>
                 {this.state.gameLoaded && (
-                    <div>
+                    <div className="chess-wrapper mt-2">
+                        <div className="chess-board">
+                            <div>
+                                <Chessboard
+                                    width={512}
+                                    id="random"
+                                    position={this.state.fen}
+                                    transitionDuration={500}
+                                    boardStyle={{
+                                        borderRadius: "5px",
+                                        boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+                                    }}
+                                    onDrop={this.onDrop}
+                                    onMouseOverSquare={this.onMouseOverSquare}
+                                    onMouseOutSquare={this.onMouseOutSquare}
+                                    squareStyles={this.state.squareStyles}
+                                    dropSquareStyle={this.state.dropSquareStyle}
+                                    onDragOverSquare={this.onDragOverSquare}
+                                    onSquareClick={this.onSquareClick}
+                                    onSquareRightClick={this.onSquareRightClick}
+                                    allowDrag={this.isPlayerAllowedToMove}
+                                />
+                            </div>
+                            <div>
+                                <TurnInfo
+                                    playerLogin={this.state.playerLogin}
+                                    isClientOwner={this.state.isClientOwnerOfGame}
+                                    winner={this.state.winner}
+                                    winnerType={this.state.winnerType}
+                                    currentPlayer={this.state.turn}
+                                    gameType={this.state.gameType}
+                                    playerColor={this.state.playerColor}
+                                />
+                                <GolemChessStats
+                                    stats_white={this.state.white_stats}
+                                    stats_black={this.state.black_stats}
+                                />
+                            </div>
+                        </div>
                         <div>
-                            <CardGroup>
+                            <CardGroup style={{ width: 1350 }}>
                                 {/* <NewGame
                                     disabled={this.state.isNewGameButtononDisabled}
                                     onClick={this.handleNewGameClick}
@@ -532,46 +569,6 @@ class ChessGame extends Component {
                                     statusLines={this.state.statusLines}
                                 />
                             </CardGroup>
-                        </div>
-                        <div className="chess-wrapper">
-                            <div className="chess-board">
-                                <div>
-                                    <Chessboard
-                                        width={512}
-                                        id="random"
-                                        position={this.state.fen}
-                                        transitionDuration={500}
-                                        boardStyle={{
-                                            borderRadius: "5px",
-                                            boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
-                                        }}
-                                        onDrop={this.onDrop}
-                                        onMouseOverSquare={this.onMouseOverSquare}
-                                        onMouseOutSquare={this.onMouseOutSquare}
-                                        squareStyles={this.state.squareStyles}
-                                        dropSquareStyle={this.state.dropSquareStyle}
-                                        onDragOverSquare={this.onDragOverSquare}
-                                        onSquareClick={this.onSquareClick}
-                                        onSquareRightClick={this.onSquareRightClick}
-                                        allowDrag={this.isPlayerAllowedToMove}
-                                    />
-                                </div>
-                                <div>
-                                    <TurnInfo
-                                        playerLogin={this.state.playerLogin}
-                                        isClientOwner={this.state.isClientOwnerOfGame}
-                                        winner={this.state.winner}
-                                        winnerType={this.state.winnerType}
-                                        currentPlayer={this.state.turn}
-                                        gameType={this.state.gameType}
-                                        playerColor={this.state.playerColor}
-                                    />
-                                    <GolemChessStats
-                                        stats_white={this.state.white_stats}
-                                        stats_black={this.state.black_stats}
-                                    />
-                                </div>
-                            </div>
                             <div className="chess-table">
                                 <div>
                                     <MovesTable

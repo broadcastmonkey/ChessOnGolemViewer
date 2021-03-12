@@ -103,14 +103,17 @@ class NavBar extends Component {
         return (
             this.state.navBarVisible && (
                 <div>
-                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark w-100">
+                    <nav
+                        className="navbar navbar-expand-lg navbar-dark bg-dark w-100 p-0"
+                        style={{ height: 40 }}
+                    >
                         <div className="navbar-nav w-200">
                             <NavLink
                                 className="nav-item nav-link"
                                 to="/"
                                 style={{ marginRight: 40 }}
                             >
-                                <h2>Chess on Golem</h2>
+                                <h3>Chess on Golem</h3>
                             </NavLink>
                         </div>{" "}
                         <SignalStrengthIcon
