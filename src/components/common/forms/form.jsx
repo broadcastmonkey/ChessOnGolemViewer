@@ -35,7 +35,7 @@ class Form extends Component {
     };
 
     handleSubmit = (e) => {
-        console.log("handle submit");
+        //  console.log("handle submit");
         e.preventDefault();
 
         const errors = this.validate();

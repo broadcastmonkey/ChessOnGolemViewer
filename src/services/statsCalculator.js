@@ -22,6 +22,7 @@ function getMoveStats(moves, turn, playerColor) {
 
     let stats = {};
     stats.displayOtherStats = turn !== playerColor;
+
     stats.total_moves = moves.filter((x) => x.turn === turn && x.move !== undefined).length;
     stats.avg_depth =
         moves
