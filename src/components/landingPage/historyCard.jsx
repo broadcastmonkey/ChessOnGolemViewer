@@ -53,7 +53,7 @@ class HistoryCard extends Form {
             if (user !== null)
                 this.setState({
                     nick: user.login,
-                    passphrase: user.passphrase,
+                    passphrase: user.password,
                     isPassphraseVisible: true,
                 });
         } else if (status === 409) {
