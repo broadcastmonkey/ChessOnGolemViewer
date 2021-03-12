@@ -51,7 +51,7 @@ class ChessGame extends Component {
             square: "",
             // array of past game moves
             history: [],
-            playerColor: PlayerEnum.white,
+            playerColor: "none",
             gameType: gameType,
         };
     };
@@ -173,8 +173,16 @@ class ChessGame extends Component {
             gameId: data.gameId,
             stepId: data.stepId,
             moves: data.moves,
-            black_stats: getMoveStats(data.moves, PlayerEnum.black, data.playerColor),
-            white_stats: getMoveStats(data.moves, PlayerEnum.white, data.playerColor),
+            black_stats: getMoveStats(
+                data.moves,
+                PlayerEnum.black,
+                data.gameType === GameType.GolemVsGolem ? "none" : data.playerColor,
+            ),
+            white_stats: getMoveStats(
+                data.moves,
+                PlayerEnum.white,
+                data.gameType === GameType.GolemVsGolem ? "none" : data.playerColor,
+            ),
             statusLines: createStatusLines(),
 
             isNewGameButtononDisabled: false,
