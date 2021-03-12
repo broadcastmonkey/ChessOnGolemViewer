@@ -5,7 +5,7 @@ class GameIcon extends Component {
     render() {
         const { type } = this.props;
         const img = "/" + (type === GameType.GolemVsGolem ? "golem" : "player") + ".png";
-        return <img style={{ width: "5%", height: "5%" }} src={img} alt="game type" />;
+        return <img style={{ width: "20px", height: "20px" }} src={img} alt="game type" />;
     }
 }
 

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import GenericTable from "./common/table/genericTable";
 
-import { Link } from "react-router-dom";
+import { GameType } from "./../enums";
+import GameIcon from "./gameIcon";
 class GamesTable extends Component {
     columns = [
         {
@@ -9,27 +10,41 @@ class GamesTable extends Component {
 
             visible: false,
         },
+
+        { path: "gameType", label: "type", content: (game) => <GameIcon type={game.gameType} /> },
+        { path: "nick", label: "nick" },
         {
-            path: "gameId",
-            label: "id",
-            key: "gameId",
+            path: "movesCount",
+            label: "moves count",
             content: (game) => (
-                <Link key={game} to={"/game/" + game.gameId}>
-                    {game.gameId}
-                </Link>
+                <p style={{ fontFamily: "'Courier New'", margin: 0, padding: 0 }}>
+                    {" "}
+                    {game.movesCount.toString().padStart(10, "\u00A0")}
+                </p>
             ),
         },
-        { path: "gameType", label: "type" },
         {
             path: "isGameFinished",
-            label: "finished ?",
-            content: (game) => (game.isGameFinished ? "true" : "false"),
+            label: "status",
+            content: (game) => {
+                if (game.isGameFinished === false) return "-";
+
+                let result = game.winnerType;
+                if (result === "draw") return result;
+
+                result += " / " + game.winner + " wins";
+                return result;
+            },
         },
     ];
 
     render() {
         const { games, rowClick } = this.props;
         games.forEach((x) => (x._id = x.gameId));
+        games.forEach((x) => {
+            if (x.gameType === GameType.PlayerVsGolem) x.nick = x.playerLogin;
+            else x.nick = "golem";
+        });
 
         return (
             <GenericTable

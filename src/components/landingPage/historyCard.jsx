@@ -15,12 +15,14 @@ class HistoryCard extends Form {
         data: { login: "", passphrase: "" },
         dataReRegister: { login: "", password: "" },
         nick: "",
+        passphrase: "",
         loginVisible: 1,
         registrationInfo: "",
         loginInfo: "",
         difficultyLevel: "beginner",
         errors: {},
         showModal: false,
+        isPassphraseVisible: false,
     };
     schema = {
         login: Joi.string().min(2).max(8).required().label("Nick"),
@@ -34,7 +36,7 @@ class HistoryCard extends Form {
         const user = Auth.getCurrentUser();
         // console.log("user");
         // console.log(user);
-        if (user !== null) this.setState({ nick: user.login });
+        if (user !== null) this.setState({ nick: user.login, passphrase: user.password });
     };
     componentWillUnmount() {
         socket.removeListener("registerUser", this.handleRegisterUser);
@@ -48,7 +50,12 @@ class HistoryCard extends Form {
             const user = Auth.getCurrentUser();
             // console.log("user");
             //  console.log(user);
-            if (user !== null) this.setState({ nick: user.login });
+            if (user !== null)
+                this.setState({
+                    nick: user.login,
+                    passphrase: user.passphrase,
+                    isPassphraseVisible: true,
+                });
         } else if (status === 409) {
             this.setState({
                 registrationInfo:
@@ -177,9 +184,8 @@ class HistoryCard extends Form {
         return (
             <React.Fragment>
                 {" "}
-                {this.renderDifficultyDropDown()}
                 <Link style={{ float: "right" }} to={"/game/new/" + this.getDepth()}>
-                    <Button variant="primary">Start new game against golem </Button>
+                    <Button variant="primary">Start new game</Button>
                 </Link>{" "}
             </React.Fragment>
         );
@@ -213,7 +219,7 @@ class HistoryCard extends Form {
 
     renderNotLoggedIn = () => {
         return (
-            <Card bg="light" text="dark" className="mb-2 mt-2 ml-2">
+            <Card bg="light" text="dark" className="mb-2 mt-2 mr-2">
                 <Card.Header>
                     <h2>Play against golem</h2>{" "}
                 </Card.Header>
@@ -276,10 +282,12 @@ class HistoryCard extends Form {
         this.setState({ showModal: false });
     };
 
+    handleRemindPassphrase = () => this.setState({ isPassphraseVisible: true });
+
     renderLoggedIn = () => {
         return (
             <React.Fragment>
-                <Card bg="light" text="dark" className="mb-2 mt-2 ml-2">
+                <Card bg="light" text="dark" className="mb-2 mt-2 mr-2">
                     <Card.Header>
                         <h2>
                             <Dropdown style={{ width: 200, float: "left" }}>
@@ -288,6 +296,9 @@ class HistoryCard extends Form {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
+                                    <Dropdown.Item onClick={this.handleRemindPassphrase}>
+                                        Remind my passphrase
+                                    </Dropdown.Item>
                                     <Dropdown.Item onClick={this.handleLogout}>
                                         Logout
                                     </Dropdown.Item>
@@ -299,12 +310,28 @@ class HistoryCard extends Form {
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            {this.renderPlayButton()}
+                            {this.renderDifficultyDropDown()}
                         </h2>{" "}
                     </Card.Header>
                     <Card.Body>
+                        {this.renderPlayButton()}
                         <Card.Title>
-                            <b>History of your games against golem:</b>
+                            {this.state.isPassphraseVisible && (
+                                <p>
+                                    <b>Your passphrase: {this.state.passphrase}</b>{" "}
+                                    <a
+                                        href="/#"
+                                        onClick={() =>
+                                            this.setState({ isPassphraseVisible: false })
+                                        }
+                                    >
+                                        [ hide ]
+                                    </a>
+                                </p>
+                            )}
+                            {!this.state.isPassphraseVisible && (
+                                <h5>History of your games against golem:</h5>
+                            )}
                         </Card.Title>
                         <Card.Text>yet to be implemented</Card.Text>
                     </Card.Body>

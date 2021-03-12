@@ -10,6 +10,7 @@ import NotFound from "./components/notFound";
 
 import ChessGame from "./components/chessGame/chessGame";
 import LandingPage from "./components/landingPage/landingPage";
+import About from "./components/about";
 
 class App extends Component {
     state = {};
@@ -27,8 +28,8 @@ class App extends Component {
                     <NavBar />{" "}
                     <Switch>
                         {/* <Route path="/register" component={RegisterForm} /> */}
-
-                        <Route path="/not-found" component={NotFound} />
+                        <Route path="/not-found" component={NotFound} />{" "}
+                        <Route path="/about-chess-on-golem" component={About} />
                         <Route path="/game/:gameId" exact component={ChessGame} />
                         <Route path="/game/:gameId/:depthLevel" exact component={ChessGame} />
                         <Route path="/" exact component={LandingPage} />

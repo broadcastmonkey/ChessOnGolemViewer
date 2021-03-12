@@ -5,7 +5,19 @@ class TableBody extends Component {
     renderCell = (item, column) => {
         if (column.content) return column.content(item);
 
-        return _.get(item, column.path);
+        let result = _.get(item, column.path);
+        if (result === undefined || result === "") return "";
+        if (column.format !== undefined) {
+            result = (
+                <p style={{ fontFamily: "'Courier New'", margin: 0, padding: 0 }}>
+                    {(parseFloat(result) / column.format.division)
+                        .toFixed(column.format.precision)
+                        .padStart(6, "0")}
+                </p>
+            );
+        }
+
+        return result;
     };
 
     createKey = (item, column) => {

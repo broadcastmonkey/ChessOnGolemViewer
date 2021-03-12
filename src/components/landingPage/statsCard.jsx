@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
-import { GameType } from "./../../enums";
+import { GameType } from "../../enums";
 import GameIcon from "../gameIcon";
 import { Link } from "react-router-dom";
 

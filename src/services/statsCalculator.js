@@ -18,6 +18,8 @@ function getMoveStats(moves, turn, playerColor) {
         return defaultStatsObject();
     }
 
+    const precision = 1;
+
     let stats = {};
     stats.displayOtherStats = turn !== playerColor;
     stats.total_moves = moves.filter((x) => x.turn === turn && x.move !== undefined).length;
@@ -30,20 +32,20 @@ function getMoveStats(moves, turn, playerColor) {
         .filter((x) => x.turn === turn && x.move !== undefined)
         .map((x) => parseFloat(x.vm_time) / 1000)
         .reduce((a, c) => a + c)
-        .toFixed(3);
+        .toFixed(precision);
     stats.total_time = moves
         .filter((x) => x.turn === turn && x.move !== undefined)
         .map((x) => (x.total_time === undefined ? 0.0 : parseFloat(x.total_time) / 1000))
         .reduce((a, c) => a + c)
-        .toFixed(3);
+        .toFixed(precision);
 
-    stats.avg_vm_time = (stats.total_vm_time / stats.total_moves).toFixed(3);
-    stats.avg_golem_time = (stats.total_time / stats.total_moves).toFixed(3);
+    stats.avg_vm_time = (stats.total_vm_time / stats.total_moves).toFixed(precision);
+    stats.avg_golem_time = (stats.total_time / stats.total_moves).toFixed(precision);
     stats.best_golem_time = Math.min(
         ...moves
             .filter((x) => x.turn === turn && x.move !== undefined)
             .map((x) => (x.total_time === undefined ? 9999.0 : parseFloat(x.total_time) / 1000)),
-    ).toFixed(3);
+    ).toFixed(precision);
     if (stats.best_golem_time === 9999.0) stats.best_golem_time = "-";
 
     stats.total_cost = moves

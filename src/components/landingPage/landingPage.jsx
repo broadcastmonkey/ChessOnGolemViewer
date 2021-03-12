@@ -5,6 +5,8 @@ import GamesTable from "../gamesTable";
 import StatsCard from "./statsCard";
 import { GameType } from "./../../enums";
 import HistoryCard from "./historyCard";
+import ActiveGamesCard from "./activeGamesCard";
+import { Link } from "react-router-dom";
 class LandingPage extends Component {
     state = {
         activeGamesCount: 0,
@@ -92,11 +94,15 @@ class LandingPage extends Component {
                         </a>
                         <br />
                         <br />
-                        <Button variant="primary">Learn more</Button>
+                        <Link to="/about-chess-on-golem">
+                            <Button variant="primary">Learn more</Button>
+                        </Link>
                     </Card.Body>
                 </Card>
                 <div>
                     <CardGroup>
+                        {" "}
+                        <HistoryCard />
                         <StatsCard
                             totalGamesCount={this.state.totalGamesCount}
                             golemVsGolemGamesCount={this.state.playerVsGolemGamesCount}
@@ -106,22 +112,10 @@ class LandingPage extends Component {
                             isGolemVsGolemActive={this.state.isGolemVsGolemActive}
                             requestGameCallback={this.handleRequestNewGolemVsGolemGame}
                         />
-                        <Card bg="light" text="dark" className="mb-2 mt-2 ml-2">
-                            <Card.Header>
-                                <h2>Active games</h2>
-                            </Card.Header>
-                            <Card.Body>
-                                <Card.Title>
-                                    <b></b>
-                                </Card.Title>
-                                <Card.Text>
-                                    Currently there are {this.state.activeGamesCount} games running.
-                                    <br />
-                                    {this.state.totalGamesCount} games played against golem.
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                        <HistoryCard />
+                        <ActiveGamesCard
+                            totalGamesCount={this.state.totalGamesCount}
+                            activeGamesCount={this.state.activeGamesCount}
+                        />
                     </CardGroup>
                 </div>
                 <Card bg="light" text="dark" className="mb-2 mt-2">

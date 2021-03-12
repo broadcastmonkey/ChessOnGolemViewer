@@ -5,27 +5,33 @@ import { Card } from "react-bootstrap";
 
 class ChessStatusBar extends Component {
     render() {
-        const { turn, moveNumber, depth, secondsComputing, taskId, gameId } = this.props;
+        const {
+            turn,
+            moveNumber,
+
+            secondsComputing,
+            difficulty,
+
+            playerType,
+        } = this.props;
 
         return (
             <Card bg="info" text="light" style={{ width: "512" }} className="mb-2 mt-2">
                 <Card.Header>
-                    <h2>Game state / id: {gameId}</h2>
+                    <h2>Game state</h2>
                 </Card.Header>
                 <Card.Body>
-                    <Card.Title>
-                        <b>
-                            {" "}
-                            <b>Turn: {turn}</b>
-                        </b>
-                    </Card.Title>
+                    {difficulty && (
+                        <Card.Title>
+                            <b className="ml-1">Difficulty: {difficulty}</b> <br />
+                        </Card.Title>
+                    )}
                     <Card.Text>
+                        <b className="ml-1">Turn: {turn}</b>
+                        <br />
+                        <b className="ml-1">Player type: {playerType}</b> <br />
                         <b className="ml-1">Move number: {moveNumber}</b> <br />
-                        <b className="ml-1">Algorithm Depth: {depth}</b>
-                        <br />
-                        <b className="ml-1"> {secondsComputing}s</b>
-                        <br />
-                        <b className="ml-1"> task id: {taskId}</b>
+                        <b className="ml-1">Computation time: {secondsComputing}s</b>
                         <br />
                     </Card.Text>
                 </Card.Body>

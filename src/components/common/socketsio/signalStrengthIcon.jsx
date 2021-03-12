@@ -33,7 +33,7 @@ const SignalStrengthIcon = ({ label, signalValue, additionalText }) => {
                 {additionalText}
             </div>
 
-            <div className={classes}></div>
+            {signalValue === 0 && <div className={classes}></div>}
         </div>
     );
 };

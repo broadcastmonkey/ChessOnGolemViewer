@@ -12,18 +12,16 @@ import { squareStyling } from "./helpers";
 import ChessStatusBar from "../chessStatusBar/chessStatusBar";
 import GolemChessStats from "../golemGameStats/golemChessStats";
 import { StatusEnum, StatusBar, PlayerEnum, GameType } from "../../enums";
-import NewGame from "../newGame/newGame";
 import Chess from "chess.js"; // import Chess from  "chess.js"(default) if recieving an error about new Chess() not being a constructor
 import TurnInfo from "../turnInfo/turnInfo";
 import auth from "../../services/authService";
-import { isClientOwnerOfGame } from "./../../services/authService";
 
 class ChessGame extends Component {
     getDefaultStateObject = (newGameId, gameType) => {
         return {
             isClientOwnerOfGame: false,
             playerLogin: "",
-
+            difficulty: "",
             winner: "",
             winnerType: "",
             isGameFinished: false,
@@ -56,6 +54,13 @@ class ChessGame extends Component {
             playerColor: PlayerEnum.white,
             gameType: gameType,
         };
+    };
+    getDifficultyLevelDescription = (depth) => {
+        if (depth <= 1) return "beginner";
+        if (depth <= 4) return "casual player";
+        if (depth <= 8) return "experienced";
+        if (depth <= 12) return "chess master";
+        return "grandmaster";
     };
     resetState = (newGameId, gameType) => {
         this.setState(this.getDefaultStateObject(newGameId, gameType));
@@ -153,7 +158,10 @@ class ChessGame extends Component {
         this.setState({
             isClientOwnerOfGame,
             playerLogin: data.playerLogin,
-
+            difficulty:
+                data.gameType === GameType.PlayerVsGolem
+                    ? this.getDifficultyLevelDescription(data.depthBlack)
+                    : undefined,
             winner: data.winner,
             winnerType: data.winnerType,
             isGameFinished: data.isGameFinished,
@@ -199,11 +207,15 @@ class ChessGame extends Component {
         //this.resetState(gameId, GameType.PlayerVsGolem);
     };
 
-    SetAllStatusLinesInactive = () => {
+    SetAllStatusLinesInactive = (linesCountToBeOmmited) => {
+        let i = 1;
         const statusLines = this.state.statusLines.map((x) => {
+            i++;
+            if (linesCountToBeOmmited !== undefined && linesCountToBeOmmited > i) return x;
             const y = { ...x };
             y.type = StatusBar.Inactive;
             y.value = undefined;
+
             return y;
         });
 
@@ -269,13 +281,14 @@ class ChessGame extends Component {
         this.ChangeStatusLine("scriptSent", StatusBar.Active, null, providerName);
     };
     handleComputationStarted = (params) => {
-        console.log("started started started");
+        // console.log("started started started");
         const { gameId } = params;
         if (gameId !== this.state.gameId) return;
         this.status = StatusEnum.searching;
         this.ChangeStatusLine("computationStarted", StatusBar.Active, null, null);
     };
     handleComputationFinished = (params) => {
+        console.log("finished", params);
         const { time, gameId } = params;
         if (gameId !== this.state.gameId) return;
         let timeInSec = Math.round(time / 1000);
@@ -335,7 +348,7 @@ class ChessGame extends Component {
     };
     handleProviderFailed = (provider) => {
         const { taskId, providerName } = provider;
-
+        this.SetAllStatusLinesInactive(5);
         if (this.state.taskId !== taskId) return;
         console.log("provider failed...");
         console.log(provider);
@@ -363,8 +376,8 @@ class ChessGame extends Component {
                 ...a,
                 ...{
                     [c]: {
-                        background: "radial-gradient(circle, #fffc00 36%, transparent 40%)",
-                        borderRadius: "50%",
+                        background: "radial-gradient(circle, #f7bd72 36%, transparent 10%)",
+                        borderRadius: "30%",
                     },
                 },
                 ...squareStyling({
@@ -470,6 +483,11 @@ class ChessGame extends Component {
         console.log("eq: " + res);
         return res;
     };
+    handleRowClick = (rowId) => {
+        //  console.log("clcied " + gameId);
+        toast.info("row " + rowId);
+        this.setState({ fen: this.state.moves[rowId].fen });
+    };
     render() {
         return (
             <div>
@@ -477,10 +495,10 @@ class ChessGame extends Component {
                     <div>
                         <div>
                             <CardGroup>
-                                <NewGame
+                                {/* <NewGame
                                     disabled={this.state.isNewGameButtononDisabled}
                                     onClick={this.handleNewGameClick}
-                                />
+                                /> */}
                                 <ChessStatusBar
                                     turn={this.state.turn.toUpperCase()}
                                     moveNumber={this.state.stepId}
@@ -488,7 +506,13 @@ class ChessGame extends Component {
                                     secondsComputing={this.state.secondsComputing}
                                     gameId={this.state.gameId}
                                     taskId={this.state.taskId}
-                                    statusLines={createStatusLines()}
+                                    playerType={
+                                        this.state.playerColor === this.state.turn &&
+                                        this.state.gameType === GameType.PlayerVsGolem
+                                            ? "HUMAN"
+                                            : "GOLEM"
+                                    }
+                                    difficulty={this.state.difficulty}
                                 />
                                 <GolemStatusBar
                                     turn={this.state.turn.toUpperCase()}
@@ -507,7 +531,7 @@ class ChessGame extends Component {
                                         width={512}
                                         id="random"
                                         position={this.state.fen}
-                                        transitionDuration={300}
+                                        transitionDuration={500}
                                         boardStyle={{
                                             borderRadius: "5px",
                                             boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
@@ -515,8 +539,8 @@ class ChessGame extends Component {
                                         onDrop={this.onDrop}
                                         onMouseOverSquare={this.onMouseOverSquare}
                                         onMouseOutSquare={this.onMouseOutSquare}
-                                        squareStyles={this.squareStyles}
-                                        dropSquareStyle={this.dropSquareStyle}
+                                        squareStyles={this.state.squareStyles}
+                                        dropSquareStyle={this.state.dropSquareStyle}
                                         onDragOverSquare={this.onDragOverSquare}
                                         onSquareClick={this.onSquareClick}
                                         onSquareRightClick={this.onSquareRightClick}
@@ -540,7 +564,10 @@ class ChessGame extends Component {
                             </div>
                             <div className="chess-table">
                                 <div>
-                                    <MovesTable moves={this.state.moves} />
+                                    <MovesTable
+                                        rowClick={this.handleRowClick}
+                                        moves={this.state.moves}
+                                    />
                                 </div>
                             </div>
                         </div>

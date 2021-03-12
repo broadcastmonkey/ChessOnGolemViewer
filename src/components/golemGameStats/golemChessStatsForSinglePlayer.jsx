@@ -27,15 +27,15 @@ class GolemChessStatsForSinglePlayer extends Component {
                                 <br />
                                 <i>avg depth:</i> <b>{stats.avg_depth}</b>
                                 <br />
-                                <i>total vm time:</i> <b>{stats.total_vm_time}s</b>
+                                <i>total vm time:</i> <b>{stats.total_vm_time} s</b>
                                 <br />
-                                <i>avg vm time:</i> <b>{stats.avg_vm_time}s</b>
+                                <i>avg vm time:</i> <b>{stats.avg_vm_time} s</b>
                                 <br />
-                                <i>total golem time:</i> <b>{stats.total_time}s</b>
+                                <i>total golem time:</i> <b>{stats.total_time} s</b>
                                 <br />
-                                <i>avg golem time:</i> <b>{stats.avg_golem_time}s</b>
+                                <i>avg golem time:</i> <b>{stats.avg_golem_time} s</b>
                                 <br />
-                                <i>best golem time:</i> <b>{stats.best_golem_time}s</b>
+                                <i>best golem time:</i> <b>{stats.best_golem_time} s</b>
                                 <br />
                                 <i>total golem cost:</i> <b>{stats.total_cost}</b>
                                 <br />
