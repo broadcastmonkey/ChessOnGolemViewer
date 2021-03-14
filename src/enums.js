@@ -9,6 +9,7 @@ export const PlayerType = {
 export const GameTableType = {
     ALL: "all",
     PLAYER_GAMES: "player_games",
+    TOP_GAMES: "top games",
 };
 
 export const StatusEnum = {

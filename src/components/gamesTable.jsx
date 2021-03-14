@@ -49,9 +49,40 @@ class GamesTable extends Component {
         let { games, rowClick, type, playerNick } = this.props;
 
         if (type === undefined) {
+            games = games.sort((a, b) => (a.lastMoveTime < b.lastMoveTime ? 1 : -1));
         } else if (type === GameTableType.PLAYER_GAMES) {
             this.columns = this.columns.filter((x) => !["gameType", "nick"].includes(x.path));
-            games = games.filter((x) => x.playerLogin === playerNick);
+            games = games
+                .filter((x) => x.playerLogin === playerNick)
+                .sort((a, b) => (a.lastMoveTime < b.lastMoveTime ? 1 : -1));
+        } else if (type === GameTableType.TOP_GAMES) {
+            this.columns = this.columns.filter((x) => !["gameType"].includes(x.path));
+            games = games.filter((x) => x.gameType === GameType.PlayerVsGolem);
+            games = games.sort((a, b) => {
+                // a wins with checkmate and b not
+                if (
+                    a.winnerType === "checkmate" &&
+                    a.winner === "white" &&
+                    !(b.winnerType === "checkmate" && b.winner === "white")
+                )
+                    return -1;
+
+                if (
+                    b.winnerType === "checkmate" &&
+                    b.winner === "white" &&
+                    !(a.winnerType === "checkmate" && a.winner === "white")
+                )
+                    return 1;
+
+                //todo: add sort condition for difficulty level
+
+                if (a.winnerType === "draw" && b.winnerType !== "draw") return -1;
+                if (b.winnerType === "draw" && a.winnerType !== "draw") return 1;
+
+                return a.movesCount >= b.movesCount ? -1 : 1;
+
+                // < b.lastMoveTime ? 1 : -1;
+            });
         }
 
         games.forEach((x) => (x._id = x.gameId));
@@ -63,7 +94,7 @@ class GamesTable extends Component {
         return (
             <GenericTable
                 columns={this.columns}
-                data={games.sort((a, b) => (a.lastMoveTime < b.lastMoveTime ? 1 : -1))}
+                data={games}
                 rowOnClick={rowClick}
                 //sortColumn={sortColumn}
                 //onSort={onSort}

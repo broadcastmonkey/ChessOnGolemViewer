@@ -37,6 +37,7 @@ class StatsCard extends Component {
             isGolemVsGolemActive,
             golemVsGolemGameId,
             requestGameCallback,
+            totalMovesCount,
         } = this.props;
 
         return (
@@ -50,7 +51,7 @@ class StatsCard extends Component {
                     </Card.Title>
                     Currently there are {activeGamesCount} games running.
                     <hr />
-                    {totalGamesCount} games played in total
+                    {totalGamesCount} games played in total, {totalMovesCount} moves performed.
                     <br />- {golemVsGolemGamesCount} <i>golem vs golem</i> games{" "}
                     <GameIcon type={GameType.GolemVsGolem} />
                     <br />- {playerVsGolemGamesCount} <i>human vs golem</i> games{" "}

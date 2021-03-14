@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 import "./historyCard.css";
 import GamesTable from "../gamesTable";
-import { PlayerEnum, GameTableType } from "./../../enums";
+import { GameTableType } from "./../../enums";
 
 class HistoryCard extends Form {
     state = {

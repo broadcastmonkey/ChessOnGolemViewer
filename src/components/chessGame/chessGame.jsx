@@ -15,6 +15,7 @@ import { StatusEnum, StatusBar, PlayerEnum, GameType } from "../../enums";
 import Chess from "chess.js"; // import Chess from  "chess.js"(default) if recieving an error about new Chess() not being a constructor
 import TurnInfo from "../turnInfo/turnInfo";
 import auth from "../../services/authService";
+import HistoryBar from "./../turnInfo/historyBar";
 
 class ChessGame extends Component {
     getDefaultStateObject = (newGameId, gameType) => {
@@ -43,6 +44,9 @@ class ChessGame extends Component {
             black_stats: createDefaultStats(),
             isNewGameButtononDisabled: false,
             historyVisible: false,
+            historyMove: "",
+            historyMoveNumber: 0,
+
             // square styles for active drop square
             dropSquareStyle: {},
             // custom square styles
@@ -175,6 +179,7 @@ class ChessGame extends Component {
             gameId: data.gameId,
             stepId: data.stepId,
             moves: data.moves,
+
             black_stats: getMoveStats(
                 data.moves,
                 PlayerEnum.black,
@@ -325,6 +330,7 @@ class ChessGame extends Component {
 
         this.setState({
             moves,
+
             black_stats: getMoveStats(moves, PlayerEnum.black, this.state.playerColor),
             white_stats: getMoveStats(moves, PlayerEnum.white, this.state.playerColor),
         });
@@ -504,8 +510,30 @@ class ChessGame extends Component {
         } else {
             this.displayHistoryBar();
         }
-
-        this.setState({ fen: this.state.moves[rowId].fen });
+        this.setHistoryMove(rowId);
+    };
+    setHistoryMove = (rowId) => {
+        this.game.load(this.state.moves[rowId].fen);
+        this.setState({
+            fen: this.state.moves[rowId].fen,
+            historyMoveNumber: rowId,
+            historyMove: this.state.moves[rowId].move,
+        });
+    };
+    handlePrevBtnClick = () => {
+        const moveNumber = this.state.historyMoveNumber > 0 ? this.state.historyMoveNumber - 1 : 0;
+        this.setHistoryMove(moveNumber);
+    };
+    handleNextBtnClick = () => {
+        const moveNumber =
+            this.state.historyMoveNumber + 1 < this.state.moves.length
+                ? this.state.historyMoveNumber + 1
+                : this.state.moves.length - 1;
+        this.setHistoryMove(moveNumber);
+    };
+    handleHideHistoryClick = () => {
+        if (this.state.moves.length > 0) this.setHistoryMove(this.state.moves.length - 1);
+        this.hideHistoryBar();
     };
     render() {
         return (
@@ -519,7 +547,7 @@ class ChessGame extends Component {
                                     width={512}
                                     id="random"
                                     position={this.state.fen}
-                                    transitionDuration={500}
+                                    transitionDuration={200}
                                     boardStyle={{
                                         borderRadius: "5px",
                                         boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
@@ -547,16 +575,27 @@ class ChessGame extends Component {
                                         <h4>You are observer in this game</h4>
                                     </div>
                                 )}
-                                <TurnInfo
-                                    playerLogin={this.state.playerLogin}
-                                    isClientOwner={this.state.isClientOwnerOfGame}
-                                    winner={this.state.winner}
-                                    winnerType={this.state.winnerType}
-                                    currentPlayer={this.state.turn}
-                                    gameType={this.state.gameType}
-                                    playerColor={this.state.playerColor}
-                                    historyBarVisible={this.state.historyBarVisible}
-                                />
+                                {!this.state.historyBarVisible && (
+                                    <TurnInfo
+                                        playerLogin={this.state.playerLogin}
+                                        isClientOwner={this.state.isClientOwnerOfGame}
+                                        winner={this.state.winner}
+                                        winnerType={this.state.winnerType}
+                                        currentPlayer={this.state.turn}
+                                        gameType={this.state.gameType}
+                                        playerColor={this.state.playerColor}
+                                    />
+                                )}
+                                {this.state.historyBarVisible && (
+                                    <HistoryBar
+                                        moveNumber={this.state.historyMoveNumber}
+                                        totalMovesCount={this.state.moves.length}
+                                        move={this.state.historyMove}
+                                        prevBtnClick={this.handlePrevBtnClick}
+                                        nextBtnClick={this.handleNextBtnClick}
+                                        hideHistoryClick={this.handleHideHistoryClick}
+                                    />
+                                )}
                                 <GolemChessStats
                                     stats_white={this.state.white_stats}
                                     stats_black={this.state.black_stats}

@@ -12,7 +12,6 @@ class TurnInfo extends Component {
             winnerType,
             playerLogin,
             isClientOwner,
-            historyBarVisible,
         } = this.props;
         let txt = "It's Golem's turn";
         let className = "bg-warning";
@@ -30,9 +29,6 @@ class TurnInfo extends Component {
             if (isClientOwner === true) txt = "It's your turn";
             else txt = `It's ${playerLogin}'s turn`;
             className = "text-white bg-info";
-        }
-        if (historyBarVisible === true) {
-            txt = "history bar visible";
         }
 
         return (

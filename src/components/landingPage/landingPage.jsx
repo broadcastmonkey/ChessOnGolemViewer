@@ -15,6 +15,7 @@ class LandingPage extends Component {
         playerVsGolemGamesCount: 0,
         isGolemVsGolemActive: false,
         golemVsGolemGameId: false,
+        totalMovesCount: 0,
         allGames: [],
     };
     componentDidMount() {
@@ -52,6 +53,8 @@ class LandingPage extends Component {
                 (x) => x.isGameFinished === false && x.gameType === GameType.GolemVsGolem,
             ).length > 0;
 
+        const totalMovesCount = data.games.reduce((a, b) => a + b.movesCount, 0);
+
         const golemVsGolemGameId = isGolemVsGolemActive
             ? data.games.filter(
                   (x) => x.isGameFinished === false && x.gameType === GameType.GolemVsGolem,
@@ -65,6 +68,7 @@ class LandingPage extends Component {
             playerVsGolemGamesCount,
             isGolemVsGolemActive,
             golemVsGolemGameId,
+            totalMovesCount,
         });
         //  console.log(`allgames`);
         //  console.log(this.state.allGames);
@@ -111,10 +115,13 @@ class LandingPage extends Component {
                             golemVsGolemGameId={this.state.golemVsGolemGameId}
                             isGolemVsGolemActive={this.state.isGolemVsGolemActive}
                             requestGameCallback={this.handleRequestNewGolemVsGolemGame}
+                            totalMovesCount={this.state.totalMovesCount}
                         />
                         <ActiveGamesCard
                             totalGamesCount={this.state.totalGamesCount}
                             activeGamesCount={this.state.activeGamesCount}
+                            games={this.state.allGames}
+                            rowClick={this.handleRowClick}
                         />
                     </CardGroup>
                 </div>
