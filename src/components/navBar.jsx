@@ -33,8 +33,8 @@ class NavBar extends Component {
         if (this.unmounting) return;
 
         socket.emit("join", { login: "default", room: "chess", jwt: "default" }, (param) => {
-            console.log("entered room..." + param);
-            console.log(param);
+            //  console.log("entered room..." + param);
+            // console.log(param);
         });
         this.setState({ signalValue: 1, connectionAdditionalText: "" });
         this.clearInterval();

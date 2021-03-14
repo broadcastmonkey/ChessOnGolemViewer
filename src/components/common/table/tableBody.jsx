@@ -38,9 +38,7 @@ class TableBody extends Component {
                         style={rowOnClick !== undefined ? { cursor: "pointer" } : {}}
                         key={item._id}
                         onClick={() => {
-                            console.log("clicked");
                             if (rowOnClick !== undefined) {
-                                console.log("e");
                                 rowOnClick(item._id);
                             }
                         }}

@@ -2,6 +2,14 @@ export const PlayerEnum = {
     white: "white",
     black: "black",
 };
+export const PlayerType = {
+    GOLEM: "golem",
+    HUMAN: "human",
+};
+export const GameTableType = {
+    ALL: "all",
+    PLAYER_GAMES: "player_games",
+};
 
 export const StatusEnum = {
     none: 1,

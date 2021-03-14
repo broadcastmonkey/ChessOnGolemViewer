@@ -22,11 +22,11 @@ class LandingPage extends Component {
         socket.on("newGolemVsGolemGame", this.handleNewGolemVsGolemGame);
         if (socket.connected) {
             socket.emit("getGames");
-            console.log("connected and get games");
+            //console.log("connected and get games");
         } else
             socket.on("connect", (data) => {
                 socket.emit("getGames");
-                console.log("emit get games");
+                //    console.log("emit get games");
             });
     }
     componentWillUnmount() {
@@ -102,7 +102,7 @@ class LandingPage extends Component {
                 <div>
                     <CardGroup>
                         {" "}
-                        <HistoryCard />
+                        <HistoryCard games={this.state.allGames} rowClick={this.handleRowClick} />
                         <StatsCard
                             totalGamesCount={this.state.totalGamesCount}
                             golemVsGolemGamesCount={this.state.playerVsGolemGamesCount}

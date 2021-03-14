@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import GenericTable from "./common/table/genericTable";
 
-import { GameType } from "./../enums";
+import { GameTableType, GameType } from "./../enums";
 import GameIcon from "./gameIcon";
+import { GetTimeDifference } from "./golemStatusBar/helpers";
+
 class GamesTable extends Component {
     columns = [
         {
@@ -13,6 +15,11 @@ class GamesTable extends Component {
 
         { path: "gameType", label: "type", content: (game) => <GameIcon type={game.gameType} /> },
         { path: "nick", label: "nick" },
+        {
+            path: "lastMoveTime",
+            label: "last activity",
+            content: (game) => GetTimeDifference(game.lastMoveTime),
+        },
         {
             path: "movesCount",
             label: "moves count",
@@ -39,7 +46,14 @@ class GamesTable extends Component {
     ];
 
     render() {
-        const { games, rowClick } = this.props;
+        let { games, rowClick, type, playerNick } = this.props;
+
+        if (type === undefined) {
+        } else if (type === GameTableType.PLAYER_GAMES) {
+            this.columns = this.columns.filter((x) => !["gameType", "nick"].includes(x.path));
+            games = games.filter((x) => x.playerLogin === playerNick);
+        }
+
         games.forEach((x) => (x._id = x.gameId));
         games.forEach((x) => {
             if (x.gameType === GameType.PlayerVsGolem) x.nick = x.playerLogin;
@@ -49,7 +63,7 @@ class GamesTable extends Component {
         return (
             <GenericTable
                 columns={this.columns}
-                data={games}
+                data={games.sort((a, b) => (a.lastMoveTime < b.lastMoveTime ? 1 : -1))}
                 rowOnClick={rowClick}
                 //sortColumn={sortColumn}
                 //onSort={onSort}

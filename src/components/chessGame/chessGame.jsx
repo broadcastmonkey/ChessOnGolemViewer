@@ -19,6 +19,7 @@ import auth from "../../services/authService";
 class ChessGame extends Component {
     getDefaultStateObject = (newGameId, gameType) => {
         return {
+            historyBarVisible: false,
             isClientOwnerOfGame: false,
             playerLogin: "",
             difficulty: "",
@@ -346,6 +347,8 @@ class ChessGame extends Component {
         const { position, gameId } = params;
         if (gameId !== this.state.gameId) return;
 
+        if (this.state.historyBarVisible) return;
+
         this.game.load(position);
         this.setState({ fen: position });
     };
@@ -493,7 +496,15 @@ class ChessGame extends Component {
         //console.log("eq: " + res);
         return res;
     };
+    displayHistoryBar = () => this.setState({ historyBarVisible: true });
+    hideHistoryBar = () => this.setState({ historyBarVisible: false });
     handleRowClick = (rowId) => {
+        if (rowId === this.state.moves.length - 1) {
+            this.hideHistoryBar();
+        } else {
+            this.displayHistoryBar();
+        }
+
         this.setState({ fen: this.state.moves[rowId].fen });
     };
     render() {
@@ -502,6 +513,7 @@ class ChessGame extends Component {
                 {this.state.gameLoaded && (
                     <div className="chess-wrapper mt-2">
                         <div className="chess-board">
+                            {" "}
                             <div>
                                 <Chessboard
                                     width={512}
@@ -524,6 +536,17 @@ class ChessGame extends Component {
                                 />
                             </div>
                             <div>
+                                {" "}
+                                {!this.state.isClientOwnerOfGame && (
+                                    <div
+                                        className={
+                                            " d-flex justify-content-center p-2  mt-3 text-white bg-secondary"
+                                        }
+                                        style={{ width: 512 }}
+                                    >
+                                        <h4>You are observer in this game</h4>
+                                    </div>
+                                )}
                                 <TurnInfo
                                     playerLogin={this.state.playerLogin}
                                     isClientOwner={this.state.isClientOwnerOfGame}
@@ -532,6 +555,7 @@ class ChessGame extends Component {
                                     currentPlayer={this.state.turn}
                                     gameType={this.state.gameType}
                                     playerColor={this.state.playerColor}
+                                    historyBarVisible={this.state.historyBarVisible}
                                 />
                                 <GolemChessStats
                                     stats_white={this.state.white_stats}

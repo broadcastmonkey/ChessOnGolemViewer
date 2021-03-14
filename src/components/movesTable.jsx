@@ -16,6 +16,7 @@ class MovesTable extends Component {
         { path: "turn", label: "turn" },
         { path: "move", label: "move" },
         { path: "depth", label: "depth" },
+        { path: "time", label: "time", content: (move) => move.time },
 
         {
             path: "worker",

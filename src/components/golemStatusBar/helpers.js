@@ -1,3 +1,4 @@
+import moment from "moment";
 function createStatusLine(id, text, type, value) {
     return { id: id, text: text, type: type, value: value };
 }
@@ -60,11 +61,46 @@ function createDefaultGameState() {
         black_stats: createDefaultStats(),
     };
 }
+function GetTimeDifference(unix) {
+    let momentNow = moment(Date.now());
+    let momentLastMove = moment(unix);
+    //console.log("---------");
+    //  console.log("moment now  : " + momentNow.format());
+    // console.log("moment last : " + momentLastMove.format());
 
+    const diff = moment.duration(momentNow.diff(momentLastMove)); // moment(momentNow - momentLastMove).utc();
+    // console.log("diff : " + diff.format());
+    // let result = diff.format("D[ day(s)] H[ hour(s)] m[ minute(s)] s[ second(s) ago.]");
+
+    //Get Days and subtract from duration
+    var days = Math.floor(diff.asDays());
+    diff.subtract(moment.duration(days, "days"));
+
+    //Get hours and subtract from duration
+    var hours = diff.hours();
+    diff.subtract(moment.duration(hours, "hours"));
+
+    //Get Minutes and subtract from duration
+    var minutes = diff.minutes();
+    diff.subtract(moment.duration(minutes, "minutes"));
+    // var seconds = diff.seconds();
+    // console.log(days, hours, minutes, seconds);
+    //console.log(result);
+    //  console.log("---------");
+
+    if (days > 1) return `${days} days ago`;
+    if (days === 1) return "yesterday";
+    if (hours > 1) return `${hours} hours ago`;
+    if (hours === 1) return "hour ago";
+    if (minutes > 1) return `${minutes} minutes ago`;
+    if (minutes === 1) return "minute ago";
+    return "seconds ago";
+}
 export {
     createCurrentTaskState,
     createStatusLine,
     createStatusLines,
     createDefaultStats,
     createDefaultGameState,
+    GetTimeDifference,
 };

@@ -9,6 +9,8 @@ import { Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import "./historyCard.css";
+import GamesTable from "../gamesTable";
+import { PlayerEnum, GameTableType } from "./../../enums";
 
 class HistoryCard extends Form {
     state = {
@@ -28,7 +30,10 @@ class HistoryCard extends Form {
         login: Joi.string().min(2).max(8).required().label("Nick"),
         passphrase: Joi.optional(),
     };
-
+    componentWillUnmount() {
+        socket.removeListener("registerUser", this.handleRegisterUser);
+        socket.removeListener("loginUser", this.handleLoginUser);
+    }
     componentDidMount = () => {
         socket.on("registerUser", this.handleRegisterUser);
         socket.on("loginUser", this.handleLoginUser);
@@ -38,10 +43,7 @@ class HistoryCard extends Form {
         // console.log(user);
         if (user !== null) this.setState({ nick: user.login, passphrase: user.password });
     };
-    componentWillUnmount() {
-        socket.removeListener("registerUser", this.handleRegisterUser);
-        socket.removeListener("loginUser", this.handleLoginUser);
-    }
+
     handleRegisterUser = (data) => {
         const { status, login } = data;
         if (status === 201) {
@@ -285,6 +287,7 @@ class HistoryCard extends Form {
     handleRemindPassphrase = () => this.setState({ isPassphraseVisible: true });
 
     renderLoggedIn = () => {
+        let { games, rowClick } = this.props;
         return (
             <React.Fragment>
                 <Card bg="light" text="dark" className="mb-2 mt-2 mr-2">
@@ -330,10 +333,15 @@ class HistoryCard extends Form {
                                 </p>
                             )}
                             {!this.state.isPassphraseVisible && (
-                                <h5>History of your games against golem:</h5>
+                                <h5>List of your games against golem:</h5>
                             )}
                         </Card.Title>
-                        <Card.Text>yet to be implemented</Card.Text>
+                        <GamesTable
+                            games={games}
+                            rowClick={rowClick}
+                            type={GameTableType.PLAYER_GAMES}
+                            playerNick={this.state.nick}
+                        />
                     </Card.Body>
                 </Card>{" "}
                 <Modal show={this.state.showModal} onHide={this.showModal}>
@@ -360,7 +368,7 @@ class HistoryCard extends Form {
     render() {
         const user = Auth.getCurrentUser();
         const isLoggedIn = user !== null;
-        console.log(isLoggedIn);
+        //console.log(isLoggedIn);
         if (isLoggedIn === true) return this.renderLoggedIn();
         else return this.renderNotLoggedIn();
     }
