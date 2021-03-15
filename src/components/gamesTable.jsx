@@ -55,6 +55,9 @@ class GamesTable extends Component {
             games = games
                 .filter((x) => x.playerLogin === playerNick)
                 .sort((a, b) => (a.lastMoveTime < b.lastMoveTime ? 1 : -1));
+
+            const arrSize = 5;
+            if (arrSize > 5) games = games.slice(0, arrSize);
         } else if (type === GameTableType.TOP_GAMES) {
             this.columns = this.columns.filter((x) => !["gameType"].includes(x.path));
             games = games.filter((x) => x.gameType === GameType.PlayerVsGolem);
@@ -83,6 +86,8 @@ class GamesTable extends Component {
 
                 // < b.lastMoveTime ? 1 : -1;
             });
+            const arrSize = 5;
+            if (arrSize > 5) games = games.slice(0, arrSize);
         }
 
         games.forEach((x) => (x._id = x.gameId));
