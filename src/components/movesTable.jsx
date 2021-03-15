@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import GenericTable from "./common/table/genericTable";
+import { GetTimeDifference } from "./golemStatusBar/helpers";
 
 class MovesTable extends Component {
     columns = [
@@ -16,7 +17,7 @@ class MovesTable extends Component {
         { path: "turn", label: "turn" },
         { path: "move", label: "move" },
         { path: "depth", label: "depth" },
-        { path: "time", label: "time", content: (move) => move.time },
+        { path: "time", label: "time", content: (game) => GetTimeDifference(game.time) },
 
         {
             path: "worker",

@@ -331,8 +331,16 @@ class ChessGame extends Component {
         this.setState({
             moves,
 
-            black_stats: getMoveStats(moves, PlayerEnum.black, this.state.playerColor),
-            white_stats: getMoveStats(moves, PlayerEnum.white, this.state.playerColor),
+            black_stats: getMoveStats(
+                moves,
+                PlayerEnum.black,
+                this.state.gameType === GameType.GolemVsGolem ? "none" : this.state.playerColor,
+            ),
+            white_stats: getMoveStats(
+                moves,
+                PlayerEnum.white,
+                this.state.gameType === GameType.GolemVsGolem ? "none" : this.state.playerColor,
+            ),
         });
     };
 
