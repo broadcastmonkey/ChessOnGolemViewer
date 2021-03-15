@@ -109,8 +109,8 @@ class LandingPage extends Component {
                         <HistoryCard games={this.state.allGames} rowClick={this.handleRowClick} />
                         <StatsCard
                             totalGamesCount={this.state.totalGamesCount}
-                            golemVsGolemGamesCount={this.state.playerVsGolemGamesCount}
-                            playerVsGolemGamesCount={this.state.golemVsGolemGamesCount}
+                            playerVsGolemGamesCount={this.state.playerVsGolemGamesCount}
+                            golemVsGolemGamesCount={this.state.golemVsGolemGamesCount}
                             activeGamesCount={this.state.activeGamesCount}
                             golemVsGolemGameId={this.state.golemVsGolemGameId}
                             isGolemVsGolemActive={this.state.isGolemVsGolemActive}
