@@ -22,7 +22,7 @@ class HistoryBar extends Component {
                     className={"d-flex mt-3  mb-2 " + className}
                     style={{ width: 512, flexWrap: "wrap" }}
                 >
-                    <div class="mt-3">
+                    <div className="mt-3">
                         <button
                             onClick={prevBtnClick}
                             style={{ position: "absolute" }}
