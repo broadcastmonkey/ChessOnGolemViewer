@@ -6,7 +6,7 @@ import StatsCard from "./statsCard";
 import { GameType } from "./../../enums";
 import HistoryCard from "./historyCard";
 import ActiveGamesCard from "./activeGamesCard";
-import { Link } from "react-router-dom";
+
 class LandingPage extends Component {
     state = {
         activeGamesCount: 0,
@@ -98,9 +98,9 @@ class LandingPage extends Component {
                         </a>
                         <br />
                         <br />
-                        <Link to="/about-chess-on-golem">
+                        <a href="https://github.com/broadcastmonkey/chessongolem">
                             <Button variant="primary">Learn more</Button>
-                        </Link>
+                        </a>
                     </Card.Body>
                 </Card>
                 <div>
