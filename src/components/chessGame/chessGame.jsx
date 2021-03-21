@@ -478,20 +478,37 @@ class ChessGame extends Component {
             pieceSquare: square,
         }));
 
-        let move = this.game.move({
-            from: this.state.pieceSquare,
+        if (!this.isPlayerAllowedToMove()) return;
+        // see if the move is legal
+        const moveData = {
+            from: sourceSquare,
             to: square,
             promotion: "q", // always promote to a queen for example simplicity
-        });
+        };
+        let move = this.game.move(moveData);
 
         // illegal move
         if (move === null) return;
+
+        this.setState(({ history, pieceSquare }) => ({
+            /*fen: this.game.fen(),
+            history: this.game.history({ verbose: true }),*/
+            squareStyles: squareStyling({ pieceSquare, history }),
+        }));
+        socket.emit("newMove", {
+            gameId: this.state.gameId,
+            fen: this.game.fen(),
+            move: moveData,
+            token: auth.getAuthToken(),
+        });
+
+        /*
 
         this.setState({
             fen: this.game.fen(),
             history: this.game.history({ verbose: true }),
             pieceSquare: "",
-        });
+        });*/
     };
 
     onSquareRightClick = (square) =>
