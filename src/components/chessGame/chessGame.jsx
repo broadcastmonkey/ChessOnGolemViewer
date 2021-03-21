@@ -481,7 +481,7 @@ class ChessGame extends Component {
         if (!this.isPlayerAllowedToMove()) return;
         // see if the move is legal
         const moveData = {
-            from: sourceSquare,
+            from: this.state.pieceSquare,
             to: square,
             promotion: "q", // always promote to a queen for example simplicity
         };
