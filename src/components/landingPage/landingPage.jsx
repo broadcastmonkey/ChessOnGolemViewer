@@ -12,7 +12,7 @@ import { paginate } from "./../common/table/paginate";
 class LandingPage extends Component {
     state = {
         currentPage: 1,
-        pageSize: 3,
+        pageSize: 10,
         activeGamesCount: 0,
         totalGamesCount: 0,
         golemVsGolemGamesCount: 0,
