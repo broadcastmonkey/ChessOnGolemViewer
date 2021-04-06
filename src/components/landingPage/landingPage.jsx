@@ -88,10 +88,8 @@ class LandingPage extends Component {
     getPagedData = () => {
         const { pageSize, currentPage, allGames } = this.state;
 
-        let filtered = allGames;
-
+        let filtered = allGames.sort((a, b) => (a.lastMoveTime < b.lastMoveTime ? 1 : -1));
         const games = paginate(filtered, currentPage, pageSize);
-
         return { totalCount: filtered.length, data: games };
     };
     handlePageChange = (page) => {
