@@ -6,9 +6,13 @@ import StatsCard from "./statsCard";
 import { GameType } from "./../../enums";
 import HistoryCard from "./historyCard";
 import ActiveGamesCard from "./activeGamesCard";
+import Pagination from "./../common/table/pagination";
+import { paginate } from "./../common/table/paginate";
 
 class LandingPage extends Component {
     state = {
+        currentPage: 1,
+        pageSize: 3,
         activeGamesCount: 0,
         totalGamesCount: 0,
         golemVsGolemGamesCount: 0,
@@ -80,7 +84,23 @@ class LandingPage extends Component {
     handleRequestNewGolemVsGolemGame = () => {
         socket.emit("newGolemVsGolemGameRequest");
     };
+
+    getPagedData = () => {
+        const { pageSize, currentPage, allGames } = this.state;
+
+        let filtered = allGames;
+
+        const games = paginate(filtered, currentPage, pageSize);
+
+        return { totalCount: filtered.length, data: games };
+    };
+    handlePageChange = (page) => {
+        this.setState({ currentPage: page });
+    };
+
     render() {
+        const { totalCount, data: games } = this.getPagedData();
+        const { pageSize, currentPage } = this.state;
         return (
             <div>
                 <Card bg="info" text="white" className="mb-2 mt-2">
@@ -125,12 +145,19 @@ class LandingPage extends Component {
                         />
                     </CardGroup>
                 </div>
+
                 <Card bg="light" text="dark" className="mb-2 mt-2">
                     <Card.Header>
-                        <h2>All games</h2>
+                        <h2>All games</h2>{" "}
                     </Card.Header>
                     <Card.Body>
-                        <GamesTable games={this.state.allGames} rowClick={this.handleRowClick} />
+                        <GamesTable games={games} rowClick={this.handleRowClick} />{" "}
+                        <Pagination
+                            itemsCount={totalCount}
+                            pageSize={pageSize}
+                            currentPage={currentPage}
+                            onPageChange={this.handlePageChange}
+                        />
                     </Card.Body>
                 </Card>
             </div>
