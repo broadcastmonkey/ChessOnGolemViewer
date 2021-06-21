@@ -5,6 +5,11 @@ const ENDPOINT = process.env.REACT_APP_SOCKET_SERVER_URL;
 console.log(NAME + " // end point : " + ENDPOINT);
 // console.log(process.env);
 // console.log(process.env.NODE_ENV);
-const socket = io(ENDPOINT);
+const socket = io(ENDPOINT, {
+    withCredentials: true,
+    /* extraHeaders: {
+        ""Access-Control-Allow-Origin"": "abcd",
+    },*/
+});
 
 export default socket;
